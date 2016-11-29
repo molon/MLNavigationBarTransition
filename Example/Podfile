@@ -1,0 +1,12 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '7.0'
+
+workspace 'MLNavigationBarTransition.xcworkspace'
+
+target 'MLNavigationBarTransition' do
+	project 'MLNavigationBarTransition.xcodeproj'
+    
+    pod 'MLKit', '~> 0.2.3'
+    pod 'MLNavigationBarTransition', :path => '../MLNavigationBarTransition.podspec'
+end
