@@ -119,7 +119,7 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
 #warning this bug exists above 8.3
 #warning 当底部是默认颜色的时候，上面是灰色时候，还是会有细的白色线条出现
     if ([UIDevice currentDevice].systemVersion.doubleValue<8.3f) {
-        CGFloat offset = 1.0f/[UIScreen mainScreen].scale+2.0f;
+        CGFloat offset = 1.0f/[UIScreen mainScreen].scale;
         frame.origin.x -= offset;
         frame.size.width += offset*2;
     }

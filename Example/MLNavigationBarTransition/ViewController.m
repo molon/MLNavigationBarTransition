@@ -33,7 +33,10 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = [NSString stringWithFormat:@"Title%ld",[self.navigationController.viewControllers indexOfObject:self]];
+    
+    NSInteger index = [self.navigationController.viewControllers indexOfObject:self];
+    
+    self.title = [NSString stringWithFormat:@"Title%ld",(long)index];
     
     _tableView = ({
         UITableView *tableView = [[UITableView alloc]init];
@@ -46,7 +49,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     
     [self.view addSubview:_tableView];
     
-    NSString *text = [NSString stringWithFormat:@"Next%ld",self.navigationController.viewControllers.count];
+    NSString *text = [NSString stringWithFormat:@"Next%ld",(long)(index+1)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:text style:UIBarButtonItemStylePlain target:self action:@selector(test)];
     
 //    if (!_configs) {
@@ -70,6 +73,39 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
                       @"1.0",
                       @"-1",
                       ]mutableCopy];
+    }else{
+        //simple test
+        if (index==2) {
+            _configs = [@[
+                          @"None",
+                          @"None",
+                          @"Black",
+                          @"Black",
+                          @"YES",
+                          @"0.0",
+                          @"-1",
+                          ]mutableCopy];
+        }else if (index==4) {
+            _configs = [@[
+                          @"Gray",
+                          @"None",
+                          @"White",
+                          @"White",
+                          @"YES",
+                          @"1.0",
+                          @"-1",
+                          ]mutableCopy];
+        }else if (index==5) {
+            _configs = [@[
+                          @"Red",
+                          @"None",
+                          @"Yellow",
+                          @"Yellow",
+                          @"YES",
+                          @"1.0",
+                          @"-1",
+                          ]mutableCopy];
+        }
     }
     
     self.navigationBarConfig = [self barConfigWithConfigs:_configs];
@@ -77,7 +113,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     //just for test
-    if (self.navigationBarConfig.backgroundAlpha<0.5) {
+    if (self.navigationBarConfig.backgroundAlpha<0.5||(!self.navigationBarConfig.barTintColor&&!self.navigationBarConfig.barBackgroundImageColor)) {
         return UIStatusBarStyleDefault;
     }
     return UIStatusBarStyleLightContent;
@@ -167,7 +203,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     button.userInfo = @(indexPath.row);
     switch (indexPath.row) {
         case RowIndexBarTintColor:
-            button.dataOfSingleComponentPicker = @[@"Gray",@"Red"];
+            button.dataOfSingleComponentPicker = @[@"None",@"Gray",@"Red"];
             break;
         case RowIndexBarBackgroundImageColor:
             button.dataOfSingleComponentPicker = @[@"None",@"Gray",@"Red"];
