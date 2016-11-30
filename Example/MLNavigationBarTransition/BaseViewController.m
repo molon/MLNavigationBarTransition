@@ -42,7 +42,7 @@ static inline UIImage *kImageWithColor(UIColor *color) {
 - (void)updateNavigationBarDisplay {
     MLNavigationBarConfig *config = self.navigationBarConfig;
     
-    //if config is nil, reset to default
+    //if config is nil, reset to default, please change below to your own default
     
     [self.navigationController.navigationBar setBarTintColor:config.barTintColor];
     
@@ -75,14 +75,10 @@ static inline UIImage *kImageWithColor(UIColor *color) {
     self.navigationController.navigationBar.ml_backgroundView.frame = frame;
     
     //other default
-//    [self.navigationController.navigationBar setTintColor:nil];
     [self.navigationController.navigationBar setTranslucent:YES];
     
+    //update status bar style
     [self setNeedsStatusBarAppearanceUpdate];
-}
-
-- (void)popVC {
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
