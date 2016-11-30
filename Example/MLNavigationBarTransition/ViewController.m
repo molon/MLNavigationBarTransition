@@ -8,8 +8,6 @@
 
 #import "ViewController.h"
 #import "MLPickerButton.h"
-#import <MLKit.h>
-#import "UINavigationBar+MLNavigationBarTransition.h"
 
 typedef NS_ENUM(NSUInteger, RowIndex) {
     RowIndexBarTintColor = 0,
@@ -20,6 +18,21 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 
 #define kRowCount 4
 #define kButtonTag 100
+
+static inline UIImage *kImageWithColor(UIColor *color) {
+    if (!color) {
+        return nil;
+    }
+    CGSize size = CGSizeMake(1, 1);
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, color.CGColor);
+    CGContextFillRect(context, rect);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource,MLPickerButtonDelegate>
 
@@ -46,7 +59,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 {
     [super viewDidLoad];
     self.title = @"Title";
-    self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
     
     _tableView = ({
@@ -90,13 +102,14 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     NSDictionary *map = @{
                           @"Gray":[UIColor colorWithRed:0.052 green:0.052 blue:0.057 alpha:1.000],
                           @"Red":[UIColor colorWithRed:0.802 green:0.218 blue:0.203 alpha:1.000],
+                          @"Yellow":[UIColor colorWithRed:0.991 green:0.851 blue:0.627 alpha:1.000],
                           @"White":[UIColor whiteColor],
                           @"Black":[UIColor blackColor],
                           };
     
     
     config.barTintColor = map[colorConfigs[RowIndexBarTintColor]];
-    config.barBackgroundImage = [UIImage imageWithColor:map[colorConfigs[RowIndexBarBackgroundImageColor]]];
+    config.barBackgroundImage = kImageWithColor(map[colorConfigs[RowIndexBarBackgroundImageColor]]);
     config.tintColor = map[colorConfigs[RowIndexTintColor]];
     config.titleTextAttributes = @{NSForegroundColorAttributeName:map[colorConfigs[RowIndexTitleColor]]};
     
@@ -108,7 +121,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 {
     [super viewWillLayoutSubviews];
     
-    self.tableView.frame = CGRectMake(0, [self navigationBarBottom], self.view.width, self.view.height-[self navigationBarBottom]);
+    self.tableView.frame = self.view.bounds;
 }
 
 #pragma mark - tableview

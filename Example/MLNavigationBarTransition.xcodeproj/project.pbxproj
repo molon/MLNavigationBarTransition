@@ -7,14 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		36941A8C1DEBF3030069D2F1 /* MLPickerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 36941A8B1DEBF3030069D2F1 /* MLPickerButton.m */; };
+		36408A901DEEB59E005A3BCF /* MLPickerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408A8F1DEEB59E005A3BCF /* MLPickerButton.m */; };
+		36408A931DEEB5AC005A3BCF /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408A921DEEB5AC005A3BCF /* BaseViewController.m */; };
+		36408A961DEEBB78005A3BCF /* UINavigationController+StatusStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 36408A951DEEBB78005A3BCF /* UINavigationController+StatusStyle.m */; };
 		36CA158D1DEB2F3C000FE4CA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 36CA158C1DEB2F3C000FE4CA /* main.m */; };
 		36CA15901DEB2F3C000FE4CA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 36CA158F1DEB2F3C000FE4CA /* AppDelegate.m */; };
 		36CA15931DEB2F3C000FE4CA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36CA15921DEB2F3C000FE4CA /* ViewController.m */; };
 		36CA15981DEB2F3C000FE4CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36CA15971DEB2F3C000FE4CA /* Assets.xcassets */; };
 		36CA15A61DEB2F3C000FE4CA /* MLNavigationBarTransitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36CA15A51DEB2F3C000FE4CA /* MLNavigationBarTransitionTests.m */; };
 		36CA15B11DEB2F3C000FE4CA /* MLNavigationBarTransitionUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 36CA15B01DEB2F3C000FE4CA /* MLNavigationBarTransitionUITests.m */; };
-		36DEA8CB1DEBD9CE00FE7DF9 /* MLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DEA8CA1DEBD9CE00FE7DF9 /* MLViewController.m */; };
 		E18BA79285840357F43A6C8F /* libPods-MLNavigationBarTransition.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7AFE07447FD546BD96FD3B9 /* libPods-MLNavigationBarTransition.a */; };
 /* End PBXBuildFile section */
 
@@ -36,8 +37,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		36941A8A1DEBF3030069D2F1 /* MLPickerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPickerButton.h; sourceTree = "<group>"; };
-		36941A8B1DEBF3030069D2F1 /* MLPickerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLPickerButton.m; sourceTree = "<group>"; };
+		36408A8E1DEEB59E005A3BCF /* MLPickerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPickerButton.h; sourceTree = "<group>"; };
+		36408A8F1DEEB59E005A3BCF /* MLPickerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLPickerButton.m; sourceTree = "<group>"; };
+		36408A911DEEB5AC005A3BCF /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
+		36408A921DEEB5AC005A3BCF /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		36408A941DEEBB78005A3BCF /* UINavigationController+StatusStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+StatusStyle.h"; sourceTree = "<group>"; };
+		36408A951DEEBB78005A3BCF /* UINavigationController+StatusStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+StatusStyle.m"; sourceTree = "<group>"; };
 		36CA15881DEB2F3C000FE4CA /* MLNavigationBarTransition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MLNavigationBarTransition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36CA158C1DEB2F3C000FE4CA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		36CA158E1DEB2F3C000FE4CA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -52,8 +57,6 @@
 		36CA15AC1DEB2F3C000FE4CA /* MLNavigationBarTransitionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MLNavigationBarTransitionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		36CA15B01DEB2F3C000FE4CA /* MLNavigationBarTransitionUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MLNavigationBarTransitionUITests.m; sourceTree = "<group>"; };
 		36CA15B21DEB2F3C000FE4CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		36DEA8C91DEBD9CE00FE7DF9 /* MLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLViewController.h; sourceTree = "<group>"; };
-		36DEA8CA1DEBD9CE00FE7DF9 /* MLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLViewController.m; sourceTree = "<group>"; };
 		65F9AA77249756739A9195CA /* Pods-MLNavigationBarTransition.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MLNavigationBarTransition.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MLNavigationBarTransition/Pods-MLNavigationBarTransition.debug.xcconfig"; sourceTree = "<group>"; };
 		A7AFE07447FD546BD96FD3B9 /* libPods-MLNavigationBarTransition.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MLNavigationBarTransition.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAC1587612449FC10C91F9DC /* Pods-MLNavigationBarTransition.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MLNavigationBarTransition.release.xcconfig"; path = "Pods/Target Support Files/Pods-MLNavigationBarTransition/Pods-MLNavigationBarTransition.release.xcconfig"; sourceTree = "<group>"; };
@@ -94,6 +97,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		36408A8D1DEEB59E005A3BCF /* MLPickerButton */ = {
+			isa = PBXGroup;
+			children = (
+				36408A8E1DEEB59E005A3BCF /* MLPickerButton.h */,
+				36408A8F1DEEB59E005A3BCF /* MLPickerButton.m */,
+			);
+			path = MLPickerButton;
+			sourceTree = "<group>";
+		};
 		36CA157F1DEB2F3C000FE4CA = {
 			isa = PBXGroup;
 			children = (
@@ -119,14 +131,15 @@
 		36CA158A1DEB2F3C000FE4CA /* MLNavigationBarTransition */ = {
 			isa = PBXGroup;
 			children = (
-				36941A8A1DEBF3030069D2F1 /* MLPickerButton.h */,
-				36941A8B1DEBF3030069D2F1 /* MLPickerButton.m */,
-				36DEA8C91DEBD9CE00FE7DF9 /* MLViewController.h */,
-				36DEA8CA1DEBD9CE00FE7DF9 /* MLViewController.m */,
-				36CA158E1DEB2F3C000FE4CA /* AppDelegate.h */,
-				36CA158F1DEB2F3C000FE4CA /* AppDelegate.m */,
+				36408A941DEEBB78005A3BCF /* UINavigationController+StatusStyle.h */,
+				36408A951DEEBB78005A3BCF /* UINavigationController+StatusStyle.m */,
+				36408A8D1DEEB59E005A3BCF /* MLPickerButton */,
+				36408A911DEEB5AC005A3BCF /* BaseViewController.h */,
+				36408A921DEEB5AC005A3BCF /* BaseViewController.m */,
 				36CA15911DEB2F3C000FE4CA /* ViewController.h */,
 				36CA15921DEB2F3C000FE4CA /* ViewController.m */,
+				36CA158E1DEB2F3C000FE4CA /* AppDelegate.h */,
+				36CA158F1DEB2F3C000FE4CA /* AppDelegate.m */,
 				36CA15971DEB2F3C000FE4CA /* Assets.xcassets */,
 				36CA159C1DEB2F3C000FE4CA /* Info.plist */,
 				36CA158B1DEB2F3C000FE4CA /* Supporting Files */,
@@ -349,10 +362,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				36CA15931DEB2F3C000FE4CA /* ViewController.m in Sources */,
-				36DEA8CB1DEBD9CE00FE7DF9 /* MLViewController.m in Sources */,
+				36408A961DEEBB78005A3BCF /* UINavigationController+StatusStyle.m in Sources */,
+				36408A931DEEB5AC005A3BCF /* BaseViewController.m in Sources */,
 				36CA15901DEB2F3C000FE4CA /* AppDelegate.m in Sources */,
 				36CA158D1DEB2F3C000FE4CA /* main.m in Sources */,
-				36941A8C1DEBF3030069D2F1 /* MLPickerButton.m in Sources */,
+				36408A901DEEB59E005A3BCF /* MLPickerButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

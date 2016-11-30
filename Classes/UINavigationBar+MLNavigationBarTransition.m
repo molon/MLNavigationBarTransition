@@ -77,7 +77,15 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     //frame and alpha
     bar.frame = self.frame;
     bar.alpha = self.alpha;
-    bar.ml_backgroundView.frame = self.ml_backgroundView.frame;
+    
+    CGRect frame = self.ml_backgroundView.frame;
+    //fix a bug below 8.3
+    if ([UIDevice currentDevice].systemVersion.doubleValue<8.3f) {
+        CGFloat offset = 1.0f/[UIScreen mainScreen].scale;
+        frame.origin.x -= offset;
+        frame.size.width += offset*2;
+    }
+    bar.ml_backgroundView.frame = frame;
     bar.ml_backgroundView.alpha = self.ml_backgroundView.alpha;
     
     //_barPosition is important
@@ -111,14 +119,14 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
         return NO;
     }
     
-    if (!((!self.shadowImage&&!navigationBar.shadowImage)||[UIImagePNGRepresentation(self.shadowImage) isEqual:UIImagePNGRepresentation(navigationBar.shadowImage)])) {
+    if (!((!self.shadowImage&&!navigationBar.shadowImage)||[self.shadowImage isEqual:navigationBar.shadowImage]||[UIImagePNGRepresentation(self.shadowImage) isEqual:UIImagePNGRepresentation(navigationBar.shadowImage)])) {
         return NO;
     }
     
     //if backgroundImages equal, ignore barTintColor
     UIImage *backgroundImage1 = self.ml_currentBackgroundImage;
     UIImage *backgroundImage2 = navigationBar.ml_currentBackgroundImage;
-    if ([UIImagePNGRepresentation(backgroundImage1) isEqual:UIImagePNGRepresentation(backgroundImage2)]) {
+    if ([backgroundImage1 isEqual:backgroundImage2]||[UIImagePNGRepresentation(backgroundImage1) isEqual:UIImagePNGRepresentation(backgroundImage2)]) {
         return YES;
     }
     

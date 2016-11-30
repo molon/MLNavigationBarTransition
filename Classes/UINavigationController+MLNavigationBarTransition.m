@@ -10,8 +10,6 @@
 #import "MLNavigationBarTransitionDefine.h"
 #import "UINavigationBar+MLNavigationBarTransition.h"
 
-#import <MLKit.h>
-
 MLNBT_SYNTH_DUMMY_CLASS(UINavigationController_MLNavigationBarTransition)
 
 #pragma mark - UINavigationController(MLNavigationBarTransition)
@@ -174,7 +172,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
     if (navigationController._mlnbt_transitionToBar&&![navigationController._mlnbt_transitionFromBar ml_isSameBackgroundEffectToNavigationBar:navigationController._mlnbt_transitionToBar]&&containerFromView&&containerToView) {
         
         navigationController.navigationBar.ml_backgroundView.hidden = YES;
-    
+        
         [containerFromView addSubview:navigationController._mlnbt_transitionFromBar];
         [containerToView addSubview:navigationController._mlnbt_transitionToBar];
     }else{
@@ -198,9 +196,10 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 }
 
 - (void)_mlnbt_animationEnded:(BOOL)transitionCompleted {
+    [self _mlnbt_animationEnded:transitionCompleted];
+    
     id<UIViewControllerContextTransitioning> transitionContext = [self _mlnbt_transitionContextForUINavigationParallaxTransition];
     if (!transitionContext) {
-        [self _mlnbt_animationEnded:transitionCompleted];
         return;
     }
     
@@ -210,19 +209,20 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
         navigationController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey].navigationController;
     }
     
-    void (^resetBlock)() = ^{
+    //fix a bug below 8.3
+    if (navigationController.navigationBar.ml_backgroundView.hidden) {
+        if (!transitionCompleted&&[UIDevice currentDevice].systemVersion.doubleValue<8.3f) {
+            UIColor *barTintColor = navigationController.navigationBar.barTintColor;
+            navigationController.navigationBar.barTintColor = nil;
+            navigationController.navigationBar.barTintColor = barTintColor;
+        }
         navigationController.navigationBar.ml_backgroundView.hidden = NO;
-        
-        [navigationController._mlnbt_transitionFromBar removeFromSuperview];
-        [navigationController._mlnbt_transitionToBar removeFromSuperview];
-        navigationController._mlnbt_transitionFromBar = nil;
-        navigationController._mlnbt_transitionToBar = nil;
-    };
+    }
     
-#warning iOS7的闪烁BUG还没想到好法子
-    resetBlock();
-    
-    [self _mlnbt_animationEnded:transitionCompleted];
+    [navigationController._mlnbt_transitionFromBar removeFromSuperview];
+    [navigationController._mlnbt_transitionToBar removeFromSuperview];
+    navigationController._mlnbt_transitionFromBar = nil;
+    navigationController._mlnbt_transitionToBar = nil;
 }
 
 @end

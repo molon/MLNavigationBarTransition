@@ -1,64 +1,19 @@
 PODS:
-  - AFNetworking (3.1.0):
-    - AFNetworking/NSURLSession (= 3.1.0)
-    - AFNetworking/Reachability (= 3.1.0)
-    - AFNetworking/Security (= 3.1.0)
-    - AFNetworking/Serialization (= 3.1.0)
-    - AFNetworking/UIKit (= 3.1.0)
-  - AFNetworking/NSURLSession (3.1.0):
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.1.0)
-  - AFNetworking/Security (3.1.0)
-  - AFNetworking/Serialization (3.1.0)
-  - AFNetworking/UIKit (3.1.0):
-    - AFNetworking/NSURLSession
-  - CocoaLumberjack (2.3.0):
-    - CocoaLumberjack/Default (= 2.3.0)
-    - CocoaLumberjack/Extensions (= 2.3.0)
-  - CocoaLumberjack/Core (2.3.0)
-  - CocoaLumberjack/Default (2.3.0):
-    - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (2.3.0):
-    - CocoaLumberjack/Default
-  - DHSmartScreenshot (1.3.1)
-  - MLKit (0.2.3):
-    - AFNetworking (~> 3.1.0)
-    - CocoaLumberjack (~> 2.3.0)
-    - DHSmartScreenshot (~> 1.3.1)
-    - MLLayout (~> 0.4.1)
-    - MLPersonalModel (~> 11.1.0)
-    - MLRefreshControl (~> 0.1.1)
-    - SAMKeychain (~> 1.5.2)
-    - YYCache (~> 1.0.4)
-  - MLLayout (0.4.1)
   - MLNavigationBarTransition (0.0.1)
-  - MLPersonalModel (11.1.0)
-  - MLRefreshControl (0.1.1)
-  - SAMKeychain (1.5.2)
-  - YYCache (1.0.4)
+  - MLTransition (2.1.2)
 
 DEPENDENCIES:
-  - MLKit (~> 0.2.3)
   - MLNavigationBarTransition (from `../MLNavigationBarTransition.podspec`)
+  - MLTransition (~> 2.1.2)
 
 EXTERNAL SOURCES:
   MLNavigationBarTransition:
     :path: "../MLNavigationBarTransition.podspec"
 
 SPEC CHECKSUMS:
-  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
-  DHSmartScreenshot: ee749048bd7126c4826748f98df3a4adc6ad6c78
-  MLKit: d290d3e8dd029c102f8588ce2355e9e5fd14422b
-  MLLayout: 65a0e2f3540138bf6de1c624988b4104999668da
   MLNavigationBarTransition: f6d881c2b18b80c5b14e0b51a65a17191a737180
-  MLPersonalModel: 8abb253e11eb143c29f97bcd158a542da5b38729
-  MLRefreshControl: a2c4746d9b9a456aa93f16f5b20a0438c2717c28
-  SAMKeychain: 1865333198217411f35327e8da61b43de79b635b
-  YYCache: 8105b6638f5e849296c71f331ff83891a4942952
+  MLTransition: 26751adac088c07e4df48c9f605cfdd767bb8afa
 
-PODFILE CHECKSUM: e30a6836d8fca05008613884f50e4043663ef87c
+PODFILE CHECKSUM: f03d0520d967396f8f27c942de56700749119edc
 
 COCOAPODS: 1.1.1

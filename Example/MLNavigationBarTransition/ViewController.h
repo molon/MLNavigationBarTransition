@@ -6,9 +6,9 @@
 //  Copyright © 2016年 molon. All rights reserved.
 //
 
-#import "MLViewController.h"
+#import "BaseViewController.h"
 
-@interface ViewController : MLViewController
+@interface ViewController : BaseViewController
 
 
 @end
