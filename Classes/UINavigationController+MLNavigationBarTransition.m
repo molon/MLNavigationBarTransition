@@ -44,12 +44,12 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 
 #pragma mark - disable navigationBarHidden
 - (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
-    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it");
+    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundView.alpha = 0.0f;`");
     [self _mlnbt_setNavigationBarHidden:navigationBarHidden];
 }
 
 - (void)_mlnbt_setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
-    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it");
+    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundView.alpha = 0.0f;`");
     [self _mlnbt_setNavigationBarHidden:hidden animated:animated];
 }
 
@@ -81,7 +81,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
                     [backIndicatorSnapshotView removeFromSuperview];
                 }];
             }
-
+            
         }
     }
     
@@ -98,8 +98,6 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 #pragma mark - NSObject(MLNavigationBarTransition)
 
 @interface NSObject(MLNavigationBarTransition)
-- (UIView*)_mlnbt_containerFromViewForUINavigationParallaxTransition;
-- (UIView*)_mlnbt_containerToViewForUINavigationParallaxTransition;
 @end
 
 @implementation NSObject(MLNavigationBarTransition)
@@ -222,7 +220,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
     }
     
     [self _mlnbt_animateTransition:transitionContext];
-
+    
     UIView *shadowBorderView = [self _mlnbt_shadowBorderViewForUINavigationParallaxTransition];
     if (shortShadowBorder) {
         CGRect frame = [navigationController.navigationBar.superview convertRect:navigationController.navigationBar.frame toView:shadowBorderView.superview];
