@@ -75,6 +75,10 @@ static inline UIImage *kImageWithColor(UIColor *color) {
     self.navigationController.navigationBar.ml_backgroundView.frame = frame;
     
     //other default
+    
+    //Please set translucent to YES,.
+    //If it's YES, the self.view.frame.origin.y would be zero.
+    //Or if ml_backgroundView.alpha<1.0f, the views below it would be displayed.
     [self.navigationController.navigationBar setTranslucent:YES];
     
     //update status bar style
