@@ -11,9 +11,15 @@
 @interface MLNavigationBarConfig : NSObject
 
 @property (nonatomic, strong) UIColor *barTintColor;
-@property (nonatomic, strong) UIColor *tintColor;
-@property (nonatomic, strong) UIImage *barBackgroundImage;
-@property (nonatomic, strong) NSDictionary *titleTextAttributes;
+@property (nonatomic, strong) UIColor *barBackgroundImageColor;
+
+@property (nonatomic, strong) UIColor *titleColor;
+@property (nonatomic, strong) UIColor *itemColor;
+
+@property (nonatomic, assign) BOOL showShadowImage;
+
+@property (nonatomic, assign) CGFloat backgroundAlpha;
+@property (nonatomic, assign) CGFloat backgroundHeight; //if -1,reset to default
 
 @end
 

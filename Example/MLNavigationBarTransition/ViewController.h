@@ -10,6 +10,7 @@
 
 @interface ViewController : BaseViewController
 
+@property (nonatomic, strong) NSMutableArray *configs;
 
 @end
 

@@ -81,7 +81,7 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     CGRect frame = self.ml_backgroundView.frame;
     //fix a bug below 8.3
     if ([UIDevice currentDevice].systemVersion.doubleValue<8.3f) {
-        CGFloat offset = 1.0f/[UIScreen mainScreen].scale;
+        CGFloat offset = 1.0f/[UIScreen mainScreen].scale+2.0f;
         frame.origin.x -= offset;
         frame.size.width += offset*2;
     }

@@ -12,49 +12,24 @@
 typedef NS_ENUM(NSUInteger, RowIndex) {
     RowIndexBarTintColor = 0,
     RowIndexBarBackgroundImageColor,
-    RowIndexTintColor,
     RowIndexTitleColor,
+    RowIndexItemColor,
+    RowIndexShowShadowImage,
+    RowIndexBackgroundAlpha,
+    RowIndexBackgroundHeight,
 };
 
-#define kRowCount 4
+#define kRowCount 7
 #define kButtonTag 100
-
-static inline UIImage *kImageWithColor(UIColor *color) {
-    if (!color) {
-        return nil;
-    }
-    CGSize size = CGSizeMake(1, 1);
-    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
-    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, color.CGColor);
-    CGContextFillRect(context, rect);
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource,MLPickerButtonDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSMutableArray *colorConfigs;
-
 @end
 
 @implementation ViewController
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        self.navigationBarConfig = [self configWithColorConfigs:@[@"Gray",
-                                                                  @"None",
-                                                                  @"White",
-                                                                  @"White",]];
-    }
-    return self;
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -72,13 +47,17 @@ static inline UIImage *kImageWithColor(UIColor *color) {
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(test)];
     
-    _colorConfigs = [@[
-                       @"Gray",
-                       @"None",
-                       @"White",
-                       @"White",
-                      ]mutableCopy];
-    
+    if (!_configs) {
+        _configs = [@[
+                     @"Gray",
+                     @"None",
+                     @"White",
+                     @"White",
+                     @"YES",
+                     @"1.0",
+                     @"-1",
+                     ]mutableCopy];
+    }
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -90,14 +69,14 @@ static inline UIImage *kImageWithColor(UIColor *color) {
 {
     ViewController *vc = [ViewController new];
     
-    vc.navigationBarConfig = [self configWithColorConfigs:_colorConfigs];
+    vc.navigationBarConfig = [self barConfigWithConfigs:_configs];
     
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - helper
-- (MLNavigationBarConfig*)configWithColorConfigs:(NSArray*)colorConfigs {
-    MLNavigationBarConfig *config = [MLNavigationBarConfig new];
+- (MLNavigationBarConfig*)barConfigWithConfigs:(NSArray*)configs {
+    MLNavigationBarConfig *barConfig = [MLNavigationBarConfig new];
     
     NSDictionary *map = @{
                           @"Gray":[UIColor colorWithRed:0.052 green:0.052 blue:0.057 alpha:1.000],
@@ -108,12 +87,15 @@ static inline UIImage *kImageWithColor(UIColor *color) {
                           };
     
     
-    config.barTintColor = map[colorConfigs[RowIndexBarTintColor]];
-    config.barBackgroundImage = kImageWithColor(map[colorConfigs[RowIndexBarBackgroundImageColor]]);
-    config.tintColor = map[colorConfigs[RowIndexTintColor]];
-    config.titleTextAttributes = @{NSForegroundColorAttributeName:map[colorConfigs[RowIndexTitleColor]]};
+    barConfig.barTintColor = map[configs[RowIndexBarTintColor]];
+    barConfig.barBackgroundImageColor = map[configs[RowIndexBarBackgroundImageColor]];
+    barConfig.titleColor = map[configs[RowIndexTitleColor]];
+    barConfig.itemColor = map[configs[RowIndexItemColor]];
+    barConfig.showShadowImage = [configs[RowIndexShowShadowImage] isEqualToString:@"YES"]?YES:NO;
+    barConfig.backgroundAlpha = [configs[RowIndexBackgroundAlpha] floatValue];
+    barConfig.backgroundHeight = [configs[RowIndexBackgroundHeight] floatValue];
     
-    return config;
+    return barConfig;
 }
 
 #pragma mark - layout
@@ -144,7 +126,6 @@ static inline UIImage *kImageWithColor(UIColor *color) {
     return kRowCount;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([UITableViewCell class])];
@@ -152,8 +133,8 @@ static inline UIImage *kImageWithColor(UIColor *color) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:NSStringFromClass([UITableViewCell class])];
     }
     
-    cell.textLabel.text = @[@"BarTintColor",@"BackgroundImageColor",@"TintColor",@"TitleColor"][indexPath.row];
-    cell.detailTextLabel.text = _colorConfigs[indexPath.row];
+    cell.textLabel.text = @[@"BarTintColor",@"BackgroundImageColor",@"TitleColor",@"ItemColor",@"ShowShadowImage",@"BackgroundAlpha",@"BackgroundHeight"][indexPath.row];
+    cell.detailTextLabel.text = _configs[indexPath.row];
     
     MLPickerButton *button = [cell.contentView viewWithTag:kButtonTag];
     if (!button) {
@@ -173,11 +154,20 @@ static inline UIImage *kImageWithColor(UIColor *color) {
         case RowIndexBarBackgroundImageColor:
             button.dataOfSingleComponentPicker = @[@"None",@"Gray",@"Red"];
             break;
-        case RowIndexTintColor:
-            button.dataOfSingleComponentPicker = @[@"White",@"Black"];
-            break;
         case RowIndexTitleColor:
             button.dataOfSingleComponentPicker = @[@"White",@"Black"];
+            break;
+        case RowIndexItemColor:
+            button.dataOfSingleComponentPicker = @[@"White",@"Black"];
+            break;
+        case RowIndexShowShadowImage:
+            button.dataOfSingleComponentPicker = @[@"YES",@"NO"];
+            break;
+        case RowIndexBackgroundAlpha:
+            button.dataOfSingleComponentPicker = @[@"1.0",@"0.8",@"0.5",@"0.0"];
+            break;
+        case RowIndexBackgroundHeight:
+            button.dataOfSingleComponentPicker = @[@"-1",@"30",@"20"];
             break;
         default:
             break;
@@ -190,7 +180,7 @@ static inline UIImage *kImageWithColor(UIColor *color) {
 - (void)doneWithPickerButton:(MLPickerButton*)pickerButton {
     NSInteger index = [pickerButton.pickerView selectedRowInComponent:0];
     NSString *colorString = pickerButton.dataOfSingleComponentPicker[index];
-    _colorConfigs[[pickerButton.userInfo integerValue]] = colorString;
+    _configs[[pickerButton.userInfo integerValue]] = colorString;
     
     [self.tableView reloadData];
 }

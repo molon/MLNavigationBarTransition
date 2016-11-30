@@ -7,6 +7,22 @@
 //
 
 #import "BaseViewController.h"
+#import <UINavigationBar+MLNavigationBarTransition.h>
+
+static inline UIImage *kImageWithColor(UIColor *color) {
+    if (!color) {
+        return nil;
+    }
+    CGSize size = CGSizeMake(1, 1);
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, color.CGColor);
+    CGContextFillRect(context, rect);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
 
 @implementation MLNavigationBarConfig
 @end
@@ -25,10 +41,33 @@
 
 - (void)updateNavigationBarDisplay {
     MLNavigationBarConfig *config = self.navigationBarConfig;
+    
+    //if config is nil, reset to default
+    
     [self.navigationController.navigationBar setBarTintColor:config.barTintColor];
-    [self.navigationController.navigationBar setTintColor:config.tintColor];
-    [self.navigationController.navigationBar setBackgroundImage:config.barBackgroundImage forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setTitleTextAttributes:config.titleTextAttributes];
+    
+    [self.navigationController.navigationBar setBackgroundImage:kImageWithColor(config.barBackgroundImageColor) forBarMetrics:UIBarMetricsDefault];
+    if (config) {
+        [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:config.titleColor}];
+    }else{
+        [self.navigationController.navigationBar setTitleTextAttributes:nil];
+    }
+    
+#warning need test
+    self.navigationItem.backBarButtonItem.tintColor = config.itemColor;
+    self.navigationItem.rightBarButtonItem.tintColor = config.itemColor;
+    self.navigationItem.leftBarButtonItem.tintColor = config.itemColor;
+    
+#warning zheg ge 设置无效
+    [self.navigationController.navigationBar setShadowImage:config.showShadowImage?nil:[UIImage new]];
+    
+    self.navigationController.navigationBar.ml_backgroundView.alpha = config?config.backgroundAlpha:1.0f;
+    CGRect frame = self.navigationController.navigationBar.ml_backgroundView.frame;
+    frame.size.height = (config&&config.backgroundHeight!=-1)?config.backgroundHeight:self.navigationController.navigationBar.frame.size.height-frame.origin.y;
+    self.navigationController.navigationBar.ml_backgroundView.frame = frame;
+    
+    //other default
+//    [self.navigationController.navigationBar setTintColor:nil];
     [self.navigationController.navigationBar setTranslucent:YES];
 }
 
