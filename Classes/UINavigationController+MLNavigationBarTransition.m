@@ -54,6 +54,8 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 }
 
 - (void)_mlnbt_startCustomTransition:(id)arg1 {
+    UIColor *fromTintColor = nil;
+    
     if ([self.transitionCoordinator isAnimated]) {
         UIView *containerView = [self.transitionCoordinator containerView];
         if (containerView) {
@@ -61,10 +63,34 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
             //adjust frame
             fromBar.frame = [self.navigationBar.superview convertRect:self.navigationBar.frame toView:containerView];
             self._mlnbt_transitionFromBar = fromBar;
+            
+            //maybe _mlnbt_transitionFromBar will be nil in `_mlnbt_startCustomTransition`, so we store it
+            fromTintColor = fromBar.tintColor;
+            
+            //back indicator fade out animation
+            UIView *backIndicatorView = self.navigationBar.ml_backIndicatorView;
+            if (backIndicatorView) {
+                UIView *backIndicatorSnapshotView = [backIndicatorView snapshotViewAfterScreenUpdates:NO];
+                
+                backIndicatorSnapshotView.frame = backIndicatorView.frame;
+                [backIndicatorView.superview addSubview:backIndicatorSnapshotView];
+                
+                [self.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                    backIndicatorSnapshotView.alpha = 0.0f;
+                } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                    [backIndicatorSnapshotView removeFromSuperview];
+                }];
+            }
+
         }
     }
     
     [self _mlnbt_startCustomTransition:arg1];
+    
+    if (fromTintColor) {
+        //change backButtonLabel textColor to fromBar's tintColor
+        self.navigationBar.ml_backButtonLabel.textColor = fromTintColor;
+    }
 }
 
 @end
@@ -151,9 +177,6 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
         return;
     }
     
-    //shadow border should be short or not
-    BOOL shortShadowBorder = NO;
-    
     //transitionToBar, the method `viewWillAppear` of toVC is excuted now.
     navigationController._mlnbt_transitionToBar = [navigationController.navigationBar ml_replicantBarOfSameBackgroundEffect];
     
@@ -169,21 +192,37 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
     //containerViews
     UIView *containerFromView = [self _mlnbt_containerFromViewForUINavigationParallaxTransition];
     UIView *containerToView = [self _mlnbt_containerToViewForUINavigationParallaxTransition];
-    if (navigationController._mlnbt_transitionToBar&&![navigationController._mlnbt_transitionFromBar ml_isSameBackgroundEffectToNavigationBar:navigationController._mlnbt_transitionToBar]&&containerFromView&&containerToView) {
+    
+    //if cant get these, just return
+    if (!navigationController._mlnbt_transitionToBar||!containerFromView||!containerToView) {
+        navigationController._mlnbt_transitionFromBar = nil;
+        navigationController._mlnbt_transitionToBar = nil;
         
+        [self _mlnbt_animateTransition:transitionContext];
+        return;
+    }
+    
+    //shadow border should be short or not
+    BOOL shortShadowBorder = NO;
+    
+    BOOL sameBackgroundEffect = [navigationController._mlnbt_transitionFromBar ml_isSameBackgroundEffectToNavigationBar:navigationController._mlnbt_transitionToBar];
+    if (!sameBackgroundEffect) {
         navigationController.navigationBar.ml_backgroundView.hidden = YES;
         
         [containerFromView addSubview:navigationController._mlnbt_transitionFromBar];
         [containerToView addSubview:navigationController._mlnbt_transitionToBar];
     }else{
-        shortShadowBorder = YES;
+        //if alpha not equal with 1.0f, show long shadow border
+        if (navigationController._mlnbt_transitionFromBar.ml_backgroundView.alpha*navigationController._mlnbt_transitionFromBar.alpha>=0.999f) {
+            shortShadowBorder = YES;
+        }
         
         navigationController._mlnbt_transitionFromBar = nil;
         navigationController._mlnbt_transitionToBar = nil;
     }
     
     [self _mlnbt_animateTransition:transitionContext];
-    
+
     UIView *shadowBorderView = [self _mlnbt_shadowBorderViewForUINavigationParallaxTransition];
     if (shortShadowBorder) {
         CGRect frame = [navigationController.navigationBar.superview convertRect:navigationController.navigationBar.frame toView:shadowBorderView.superview];

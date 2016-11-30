@@ -13,6 +13,41 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
 
 @implementation UINavigationBar (MLNavigationBarTransition)
 
+- (UIView*)ml_backIndicatorView {
+    static NSString *ivarKey = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSArray *keys = @[@"_backIndicatorView"];
+        for (NSString *key in keys) {
+            if (mlnbt_doesIvarExistWithName([self class], key)) {
+                ivarKey = key;
+                break;
+            }
+        }
+    });
+    if (ivarKey) {
+        return [self valueForKey:ivarKey];
+    }
+    
+    NSAssert(NO, @"ml_backgroundView is not valid");
+    return nil;
+}
+
+- (UILabel*)ml_backButtonLabel {
+    UINavigationItem *backItem = self.backItem;
+    
+    UILabel *label = nil;
+    @try {
+        UIView *backButtonView = [self.backItem valueForKey:@"_backButtonView"];
+        label = [backButtonView valueForKey:@"_label"];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        NSAssert(NO, @"ml_backButtonLabel is not valid");
+    }
+    
+    return label;
+}
+
 - (UIView*)ml_backgroundView {
     static NSString *ivarKey = nil;
     static dispatch_once_t onceToken;
@@ -64,6 +99,7 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
 - (UINavigationBar*)ml_replicantBarOfSameBackgroundEffect {
     UINavigationBar *bar = [UINavigationBar new];
     
+    bar.tintColor = self.tintColor;
     bar.barStyle = self.barStyle;
     bar.barTintColor = self.barTintColor;
     bar.shadowImage = self.shadowImage;
@@ -80,6 +116,8 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     
     CGRect frame = self.ml_backgroundView.frame;
     //fix a bug below 8.3
+#warning this bug exists above 8.3
+#warning 当底部是默认颜色的时候，上面是灰色时候，还是会有细的白色线条出现
     if ([UIDevice currentDevice].systemVersion.doubleValue<8.3f) {
         CGFloat offset = 1.0f/[UIScreen mainScreen].scale+2.0f;
         frame.origin.x -= offset;

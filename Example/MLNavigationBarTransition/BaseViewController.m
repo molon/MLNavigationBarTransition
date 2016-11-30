@@ -53,15 +53,23 @@ static inline UIImage *kImageWithColor(UIColor *color) {
         [self.navigationController.navigationBar setTitleTextAttributes:nil];
     }
     
-#warning need test
-    self.navigationItem.backBarButtonItem.tintColor = config.itemColor;
-    self.navigationItem.rightBarButtonItem.tintColor = config.itemColor;
-    self.navigationItem.leftBarButtonItem.tintColor = config.itemColor;
+    for (UIBarButtonItem *item in self.navigationItem.leftBarButtonItems) {
+        item.tintColor = config.itemColor;
+    }
+    
+    for (UIBarButtonItem *item in self.navigationItem.rightBarButtonItems) {
+        item.tintColor = config.itemColor;
+    }
+    //back button tint color
+    self.navigationController.navigationBar.tintColor = config.itemColor;
+    
+    //alpha
+    self.navigationController.navigationBar.ml_backgroundView.alpha = config?config.backgroundAlpha:1.0f;
     
 #warning zheg ge 设置无效
     [self.navigationController.navigationBar setShadowImage:config.showShadowImage?nil:[UIImage new]];
     
-    self.navigationController.navigationBar.ml_backgroundView.alpha = config?config.backgroundAlpha:1.0f;
+#warning zheg 设置也无效,而且不但无效，还会影响isSameEffect的判断
     CGRect frame = self.navigationController.navigationBar.ml_backgroundView.frame;
     frame.size.height = (config&&config.backgroundHeight!=-1)?config.backgroundHeight:self.navigationController.navigationBar.frame.size.height-frame.origin.y;
     self.navigationController.navigationBar.ml_backgroundView.frame = frame;
@@ -69,6 +77,12 @@ static inline UIImage *kImageWithColor(UIColor *color) {
     //other default
 //    [self.navigationController.navigationBar setTintColor:nil];
     [self.navigationController.navigationBar setTranslucent:YES];
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void)popVC {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

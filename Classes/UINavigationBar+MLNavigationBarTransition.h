@@ -13,6 +13,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UINavigationBar (MLNavigationBarTransition)
 
 /**
+ back indicator image view
+ */
+@property (nullable, nonatomic, strong, readonly) UIView *ml_backIndicatorView;
+
+/**
+ label on back button
+ */
+@property (nullable ,nonatomic, strong, readonly) UILabel *ml_backButtonLabel;
+
+/**
  The colored background view of bar
  */
 @property (nullable, nonatomic, strong, readonly) UIView *ml_backgroundView;
