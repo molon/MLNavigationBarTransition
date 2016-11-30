@@ -14,6 +14,8 @@
 
 MLNBT_SYNTH_DUMMY_CLASS(UINavigationController_MLNavigationBarTransition)
 
+#pragma mark - UINavigationController(MLNavigationBarTransition)
+
 @interface UINavigationController()
 
 @property (nonatomic, strong) UINavigationBar *_mlnbt_transitionFromBar;
@@ -55,7 +57,13 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 
 - (void)_mlnbt_startCustomTransition:(id)arg1 {
     if ([self.transitionCoordinator isAnimated]) {
-        self._mlnbt_transitionFromBar = [self.navigationBar ml_replicantBarOfSameBackgroundEffect];
+        UIView *containerView = [self.transitionCoordinator containerView];
+        if (containerView) {
+            UINavigationBar *fromBar = [self.navigationBar ml_replicantBarOfSameBackgroundEffect];
+            //adjust frame
+            fromBar.frame = [self.navigationBar.superview convertRect:self.navigationBar.frame toView:containerView];
+            self._mlnbt_transitionFromBar = fromBar;
+        }
     }
     
     [self _mlnbt_startCustomTransition:arg1];
@@ -63,8 +71,11 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 
 @end
 
-@interface NSObject(MLNavigationBarTransition)
+#pragma mark - NSObject(MLNavigationBarTransition)
 
+@interface NSObject(MLNavigationBarTransition)
+- (UIView*)_mlnbt_containerFromViewForUINavigationParallaxTransition;
+- (UIView*)_mlnbt_containerToViewForUINavigationParallaxTransition;
 @end
 
 @implementation NSObject(MLNavigationBarTransition)
@@ -148,14 +159,22 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
     //transitionToBar, the method `viewWillAppear` of toVC is excuted now.
     navigationController._mlnbt_transitionToBar = [navigationController.navigationBar ml_replicantBarOfSameBackgroundEffect];
     
+    //to bar
+    UIView *containerView = [transitionContext containerView];
+    if (containerView) {
+        UINavigationBar *toBar = [navigationController.navigationBar ml_replicantBarOfSameBackgroundEffect];;
+        //adjust frame
+        toBar.frame = [navigationController.navigationBar.superview convertRect:navigationController.navigationBar.frame toView:containerView];
+        navigationController._mlnbt_transitionToBar = toBar;
+    }
+    
     //containerViews
     UIView *containerFromView = [self _mlnbt_containerFromViewForUINavigationParallaxTransition];
     UIView *containerToView = [self _mlnbt_containerToViewForUINavigationParallaxTransition];
     if (navigationController._mlnbt_transitionToBar&&![navigationController._mlnbt_transitionFromBar ml_isSameBackgroundEffectToNavigationBar:navigationController._mlnbt_transitionToBar]&&containerFromView&&containerToView) {
         
         navigationController.navigationBar.ml_backgroundView.hidden = YES;
-        
-#warning 需要验证这个key，而且这两者的frame一开始那样设置不太好
+    
         [containerFromView addSubview:navigationController._mlnbt_transitionFromBar];
         [containerToView addSubview:navigationController._mlnbt_transitionToBar];
     }else{
@@ -169,12 +188,12 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
     
     UIView *shadowBorderView = [self _mlnbt_shadowBorderViewForUINavigationParallaxTransition];
     if (shortShadowBorder) {
-#warning 这个也不合适，要根据在上面的那个containerView里存储的bar的bottom来算。
-        shadowBorderView.top = navigationController.navigationBar.bottom;
+        CGRect frame = [navigationController.navigationBar.superview convertRect:navigationController.navigationBar.frame toView:shadowBorderView.superview];
+        //ensure display below naivigationBar
+        shadowBorderView.frame = CGRectMake(shadowBorderView.frame.origin.x, frame.origin.y+frame.size.height, shadowBorderView.frame.size.width, shadowBorderView.frame.size.height);
     }else{
-        CGPoint origin = [shadowBorderView convertPoint:CGPointZero toView:transitionContext.containerView];
-        shadowBorderView.top -= origin.y;
-        shadowBorderView.height += origin.y;
+        CGPoint origin = [shadowBorderView convertPoint:CGPointZero toView:containerToView];
+        shadowBorderView.frame = CGRectMake(shadowBorderView.frame.origin.x, shadowBorderView.frame.origin.y-origin.y, shadowBorderView.frame.size.width, shadowBorderView.frame.size.height+origin.y);
     }
 }
 
