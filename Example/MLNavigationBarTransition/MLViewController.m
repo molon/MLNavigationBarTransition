@@ -31,8 +31,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self updateNavigationBarDisplay];
-    
-    DDLogDebug(@"%d",self.navigationController.navigationBar.translucent);
 }
 
 - (void)updateNavigationBarDisplay {

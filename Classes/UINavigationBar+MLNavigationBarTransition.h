@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Returns a replicant of the same background effect
  */
-- (UINavigationBar*)ml_replicantBarOfSameBackgroundEffect;
+- (nullable UINavigationBar*)ml_replicantBarOfSameBackgroundEffect;
 
 /**
  Whether one bar same background effect with other one

@@ -12,18 +12,12 @@
 
 #import <MLKit.h>
 
-@interface UINavigationController (_MLNavigationBarTransition_Helper)
-
-- (void)_startCustomTransition:(id)arg1;
-
-@end
+MLNBT_SYNTH_DUMMY_CLASS(UINavigationController_MLNavigationBarTransition)
 
 @interface UINavigationController()
 
 @property (nonatomic, strong) UINavigationBar *_mlnbt_transitionFromBar;
 @property (nonatomic, strong) UINavigationBar *_mlnbt_transitionToBar;
-
-@property (nonatomic, strong, readonly) UIView *_mlnbt_shadowBorderView;
 
 @end
 
@@ -32,41 +26,23 @@
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:));
-        mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:));
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+        BOOL valid = mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:))&&
+        mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:))&&
         mlnbt_exchangeInstanceMethod(self, @selector(_startCustomTransition:), @selector(_mlnbt_startCustomTransition:));
+        NSAssert(valid, @"UINavigationController (MLNavigationBarTransition) is not valid now! Please check it.");
+#pragma clang diagnostic pop
     });
 }
 
-#pragma mark - properties
-SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionFromBar, set_mlnbt_transitionFromBar:, RETAIN_NONATOMIC, UINavigationBar *)
-SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:, RETAIN_NONATOMIC, UINavigationBar *)
+#pragma mark - addition properties
 
-#warning 这个应该扔到下面去
-- (UIView*)_mlnbt_shadowBorderView {
-    @try {
-        id transitionController = [self valueForKey:@"__transitionController"];
-        if (transitionController) {
-            UIView *dimmingView = [transitionController valueForKey:@"_borderDimmingView"];
-            if (dimmingView) {
-                UIImageView *imageView = nil;
-                for (UIView *v in dimmingView.subviews) {
-                    if ([v isKindOfClass:[UIImageView class]]) {
-                        imageView = (UIImageView *)v;
-                        break;
-                    }
-                }
-                return imageView;
-            }
-        }
-    } @catch (NSException *exception) {
-        DDLogError(@"%@",exception);
-    }
-    return nil;
-}
+MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionFromBar, set_mlnbt_transitionFromBar:, RETAIN_NONATOMIC, UINavigationBar *)
+MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:, RETAIN_NONATOMIC, UINavigationBar *)
 
 #pragma mark - disable navigationBarHidden
-#warning 考虑直接去实现隐藏背景？
 - (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
     NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it");
     [self _mlnbt_setNavigationBarHidden:navigationBarHidden];
@@ -98,22 +74,70 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:
     dispatch_once(&onceToken, ^{
         Class cls = NSClassFromString(@"_UINavigationParallaxTransition");
         
-        BOOL valid = cls&&
-        [cls instancesRespondToSelector:@selector(animateTransition:)]&&
-        [cls instancesRespondToSelector:@selector(animationEnded:)];
-#warning 可以检查的还有其他的
-        NSAssert(valid, @"MLNavigationBarTransition is not valid now! Please check it.");
-        if (valid) {
-            mlnbt_exchangeInstanceMethod(cls,@selector(animateTransition:),@selector(_mlnbt_animateTransition:));
-            mlnbt_exchangeInstanceMethod(cls,@selector(animationEnded:),@selector(_mlnbt_animationEnded:));
-        }
+        BOOL valid = mlnbt_exchangeInstanceMethod(cls,@selector(animateTransition:),@selector(_mlnbt_animateTransition:))&&
+        mlnbt_exchangeInstanceMethod(cls,@selector(animationEnded:),@selector(_mlnbt_animationEnded:));
+        NSAssert(valid, @"NSObject(MLNavigationBarTransition) is not valid now! Please check it.");
     });
 }
 
+#pragma mark - helper
+- (UIView*)_mlnbt_shadowBorderViewForUINavigationParallaxTransition {
+    @try {
+        UIView *dimmingView = [self valueForKey:@"_borderDimmingView"];
+        if (dimmingView) {
+            UIImageView *imageView = nil;
+            for (UIView *v in dimmingView.subviews) {
+                if ([v isKindOfClass:[UIImageView class]]) {
+                    imageView = (UIImageView *)v;
+                    break;
+                }
+            }
+            return imageView;
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        NSAssert(NO, @"_mlnbt_shadowBorderViewForUINavigationParallaxTransition is not valid");
+    }
+    return nil;
+}
+
+- (UIView*)_mlnbt_containerFromViewForUINavigationParallaxTransition {
+    @try {
+        return [self valueForKey:@"containerFromView"];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        NSAssert(NO, @"`containerFromView` key of UINavigationParallaxTransition is not valid");
+    }
+    return nil;
+}
+
+- (UIView*)_mlnbt_containerToViewForUINavigationParallaxTransition {
+    @try {
+        return [self valueForKey:@"containerToView"];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        NSAssert(NO, @"`containerToView` key of UINavigationParallaxTransition is not valid");
+    }
+    return nil;
+}
+
+- (id<UIViewControllerContextTransitioning>)_mlnbt_transitionContextForUINavigationParallaxTransition {
+    @try {
+        return [self valueForKey:@"transitionContext"];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        NSAssert(NO, @"`transitionContext` key of UINavigationParallaxTransition is not valid");
+    }
+    return nil;
+}
+
+#pragma mark - hook
 - (void)_mlnbt_animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UINavigationController *navigationController = fromVC.navigationController;
-    if (!navigationController) {
+    //if no _mlnbt_transitionFromBar, dont need continue
+    if (!navigationController||!navigationController._mlnbt_transitionFromBar||![navigationController.transitionCoordinator isAnimated]) {
+        navigationController._mlnbt_transitionFromBar = nil;
         [self _mlnbt_animateTransition:transitionContext];
         return;
     }
@@ -124,17 +148,14 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:
     //transitionToBar, the method `viewWillAppear` of toVC is excuted now.
     navigationController._mlnbt_transitionToBar = [navigationController.navigationBar ml_replicantBarOfSameBackgroundEffect];
     
-    //removeFromSuperview first
-    [navigationController._mlnbt_transitionFromBar removeFromSuperview];
-    [navigationController._mlnbt_transitionToBar removeFromSuperview];
-    
-    if (![navigationController._mlnbt_transitionFromBar ml_isSameBackgroundEffectToNavigationBar:navigationController._mlnbt_transitionToBar]) {
+    //containerViews
+    UIView *containerFromView = [self _mlnbt_containerFromViewForUINavigationParallaxTransition];
+    UIView *containerToView = [self _mlnbt_containerToViewForUINavigationParallaxTransition];
+    if (navigationController._mlnbt_transitionToBar&&![navigationController._mlnbt_transitionFromBar ml_isSameBackgroundEffectToNavigationBar:navigationController._mlnbt_transitionToBar]&&containerFromView&&containerToView) {
         
         navigationController.navigationBar.ml_backgroundView.hidden = YES;
         
 #warning 需要验证这个key，而且这两者的frame一开始那样设置不太好
-        UIView *containerFromView = [self valueForKey:@"containerFromView"];
-        UIView *containerToView = [self valueForKey:@"containerToView"];
         [containerFromView addSubview:navigationController._mlnbt_transitionFromBar];
         [containerToView addSubview:navigationController._mlnbt_transitionToBar];
     }else{
@@ -146,7 +167,7 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:
     
     [self _mlnbt_animateTransition:transitionContext];
     
-    UIView *shadowBorderView = navigationController._mlnbt_shadowBorderView;
+    UIView *shadowBorderView = [self _mlnbt_shadowBorderViewForUINavigationParallaxTransition];
     if (shortShadowBorder) {
 #warning 这个也不合适，要根据在上面的那个containerView里存储的bar的bottom来算。
         shadowBorderView.top = navigationController.navigationBar.bottom;
@@ -158,10 +179,16 @@ SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:
 }
 
 - (void)_mlnbt_animationEnded:(BOOL)transitionCompleted {
-    UIViewController *toVC = [[self valueForKey:@"transitionContext"] viewControllerForKey:UITransitionContextToViewControllerKey];
+    id<UIViewControllerContextTransitioning> transitionContext = [self _mlnbt_transitionContextForUINavigationParallaxTransition];
+    if (!transitionContext) {
+        [self _mlnbt_animationEnded:transitionCompleted];
+        return;
+    }
+    
+    UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UINavigationController *navigationController = toVC.navigationController;
     if (!navigationController) {
-        navigationController = [[self valueForKey:@"transitionContext"] viewControllerForKey:UITransitionContextFromViewControllerKey].navigationController;
+        navigationController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey].navigationController;
     }
     
     void (^resetBlock)() = ^{

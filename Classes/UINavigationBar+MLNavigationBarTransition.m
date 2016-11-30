@@ -9,6 +9,8 @@
 #import "UINavigationBar+MLNavigationBarTransition.h"
 #import "MLNavigationBarTransitionDefine.h"
 
+MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
+
 @implementation UINavigationBar (MLNavigationBarTransition)
 
 - (UIView*)ml_backgroundView {
@@ -66,9 +68,6 @@
     bar.barTintColor = self.barTintColor;
     bar.shadowImage = self.shadowImage;
     
-    //_barPosition is important
-    [bar setValue:@(self.barPosition) forKey:@"_barPosition"];
-    
     //backgroundImage
     [bar setBackgroundImage:[self backgroundImageForBarMetrics:UIBarMetricsDefault] forBarMetrics:UIBarMetricsDefault];
     [bar setBackgroundImage:[self backgroundImageForBarMetrics:UIBarMetricsCompact] forBarMetrics:UIBarMetricsCompact];
@@ -81,6 +80,15 @@
     bar.ml_backgroundView.frame = self.ml_backgroundView.frame;
     bar.ml_backgroundView.alpha = self.ml_backgroundView.alpha;
     
+    //_barPosition is important
+    @try {
+        [bar setValue:@(self.barPosition) forKey:@"_barPosition"];
+    } @catch (NSException *exception) {
+        NSLog(@"%@",exception);
+        NSAssert(NO, @"setting _barPosition is not valid");
+        return nil;
+    }
+    
     //translucent
     bar.translucent = self.translucent;
     
@@ -88,6 +96,10 @@
 }
 
 - (BOOL)ml_isSameBackgroundEffectToNavigationBar:(UINavigationBar*)navigationBar {
+    if (!navigationBar) {
+        return NO;
+    }
+    
     if (self.barStyle!=navigationBar.barStyle) {
         return NO;
     }
