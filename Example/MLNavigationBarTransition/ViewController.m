@@ -21,6 +21,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 #define kRowCount 6
 #define kButtonTag 100
 
+#warning Demo code is ugly, please don't care about it too more.
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource,MLPickerButtonDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
