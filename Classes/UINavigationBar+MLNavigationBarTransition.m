@@ -112,7 +112,6 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     
     bar.tintColor = self.tintColor;
     bar.barStyle = self.barStyle;
-    bar.barTintColor = self.barTintColor;
     bar.shadowImage = self.shadowImage;
     
     //backgroundImage
@@ -130,17 +129,21 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
         //below iOS8.3, if only use barTintColor, maybe trigger a bug that display a white line leftside.
         //We fix it below
         if (!self.ml_currentBackgroundImage) {
-            CGFloat offset = 1.0f/[UIScreen mainScreen].scale+2.0f;
+            CGFloat offset = 1.0f/[UIScreen mainScreen].scale;
             frame.origin.x -= offset;
             frame.size.width += offset*2;
         }
     }
-#warning 在没给予特殊的barTintColor的时候这里赋值完frame，ml_backgroundShadowView不会生成，所以就影响了下面的逻辑，需要想办法fix
+    
+    //in iOS10, if barTintColor is nil, then the ml_backgroundShadowView would be nil.
+    //It's not our expectation, so we set non-nil value first to ensure the ml_backgroundShadowView created inside.
+    bar.barTintColor = [UIColor blackColor];
     bar.frame = frame;
+    bar.barTintColor = self.barTintColor;
     
     CGRect backgroundViewFrame = self.ml_backgroundView.frame;
     backgroundViewFrame.size.width = bar.frame.size.width;
-    bar.ml_backgroundView.frame = frame;
+    bar.ml_backgroundView.frame = backgroundViewFrame;
     
     //alpha
     bar.alpha = self.alpha;

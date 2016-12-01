@@ -60,9 +60,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
                       @"YES",
                       @"1.0",
                       ]mutableCopy];
-    }else{
-        
-        self.navigationBarConfig = [self barConfigWithConfigs:_configs];
     }
 //    else{
 //        //simple test
@@ -96,7 +93,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 //        }
 //    }
     
-//    self.navigationBarConfig = [self barConfigWithConfigs:_configs];
+    self.navigationBarConfig = [self barConfigWithConfigs:_configs];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -156,36 +153,56 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    if (indexPath.row==kRowCount) {
+        self.navigationBarConfig = [self barConfigWithConfigs:_configs];
+        [self updateNavigationBarDisplay];
+        return;
+    }
+    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     MLPickerButton *button = (MLPickerButton *)[cell.contentView viewWithTag:kButtonTag];
+    NSString *currentValue = _configs[indexPath.row];
+    NSInteger index = [button.dataOfSingleComponentPicker indexOfObject:currentValue];
+    if (index!=NSNotFound) {
+        [button.pickerView selectRow:index inComponent:0 animated:NO];
+    }
     [button touchUpInSide];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return kRowCount;
+    return kRowCount+1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row==kRowCount) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UpdateCell"];
+        if (!cell) {
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UpdateCell"];
+            cell.backgroundColor = cell.contentView.backgroundColor = [UIColor clearColor];
+        }
+        cell.textLabel.text = @"Update Current NavigationBar Display";
+        return cell;
+    }
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([UITableViewCell class])];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:NSStringFromClass([UITableViewCell class])];
         cell.backgroundColor = cell.contentView.backgroundColor = [UIColor clearColor];
-    }
-    
-    cell.textLabel.text = @[@"BarTintColor",@"BackgroundImageColor",@"TitleColor",@"ItemColor",@"ShowShadowImage",@"BackgroundAlpha",@"BackgroundHeight"][indexPath.row];
-    cell.detailTextLabel.text = _configs[indexPath.row];
-    
-    MLPickerButton *button = [cell.contentView viewWithTag:kButtonTag];
-    if (!button) {
-        button = [MLPickerButton buttonWithType:UIButtonTypeCustom];
+        
+        //create picker button
+        MLPickerButton *button = [MLPickerButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectZero;
         button.delegate = self;
         button.tag = kButtonTag;
         [cell.contentView addSubview:button];
     }
     
+    cell.textLabel.text = @[@"BarTintColor",@"BackgroundImageColor",@"TitleColor",@"ItemColor",@"ShowShadowImage",@"BackgroundAlpha",@"BackgroundHeight"][indexPath.row];
+    cell.detailTextLabel.text = _configs[indexPath.row];
+    
+    MLPickerButton *button = [cell.contentView viewWithTag:kButtonTag];
     button.pickerTitle = cell.textLabel.text;
     button.userInfo = @(indexPath.row);
     switch (indexPath.row) {

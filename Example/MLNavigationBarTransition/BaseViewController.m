@@ -42,7 +42,7 @@ static inline UIImage *kImageWithColor(UIColor *color) {
 - (void)updateNavigationBarDisplay {
     MLNavigationBarConfig *config = self.navigationBarConfig;
     
-    //if config is nil, reset to default, please change below to your own default
+    //if config is nil, reset to default, please change logic below with your own default
     
     [self.navigationController.navigationBar setBarTintColor:config.barTintColor];
     
