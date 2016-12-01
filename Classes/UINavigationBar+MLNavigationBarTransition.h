@@ -23,6 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable ,nonatomic, strong, readonly) UILabel *ml_backButtonLabel;
 
 /**
+ the shadow image view
+ */
+@property (nullable, nonatomic, strong, readonly) UIView *ml_backgroundShadowView;
+
+/**
  The colored background view of bar
  */
 @property (nullable, nonatomic, strong, readonly) UIView *ml_backgroundView;
@@ -35,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Returns a replicant of the same background effect
  */
-- (nullable UINavigationBar*)ml_replicantBarOfSameBackgroundEffect;
+- (nullable UINavigationBar*)ml_replicantBarOfSameBackgroundEffectWithContainerView:(UIView*)containerView;
 
 /**
  Whether one bar same background effect with other one

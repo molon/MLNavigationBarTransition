@@ -16,10 +16,9 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     RowIndexItemColor,
     RowIndexShowShadowImage,
     RowIndexBackgroundAlpha,
-    RowIndexBackgroundHeight,
 };
 
-#define kRowCount 7
+#define kRowCount 6
 #define kButtonTag 100
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource,MLPickerButtonDelegate>
@@ -52,17 +51,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     NSString *text = [NSString stringWithFormat:@"Next%ld",(long)(index+1)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:text style:UIBarButtonItemStylePlain target:self action:@selector(test)];
     
-//    if (!_configs) {
-//        _configs = [@[
-//                     @"Gray",
-//                     @"None",
-//                     @"White",
-//                     @"White",
-//                     @"YES",
-//                     @"1.0",
-//                     @"-1",
-//                     ]mutableCopy];
-//    }
     if (!_configs) {
         _configs = [@[
                       @"Red",
@@ -71,42 +59,39 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
                       @"Yellow",
                       @"YES",
                       @"1.0",
-                      @"-1",
                       ]mutableCopy];
-    }else{
-        //simple test
-        if (index==2) {
-            _configs = [@[
-                          @"None",
-                          @"None",
-                          @"Black",
-                          @"Black",
-                          @"YES",
-                          @"0.0",
-                          @"-1",
-                          ]mutableCopy];
-        }else if (index==4) {
-            _configs = [@[
-                          @"Gray",
-                          @"None",
-                          @"White",
-                          @"White",
-                          @"YES",
-                          @"1.0",
-                          @"-1",
-                          ]mutableCopy];
-        }else if (index==5) {
-            _configs = [@[
-                          @"Red",
-                          @"None",
-                          @"Yellow",
-                          @"Yellow",
-                          @"YES",
-                          @"1.0",
-                          @"-1",
-                          ]mutableCopy];
-        }
     }
+//    else{
+//        //simple test
+//        if (index==2) {
+//            _configs = [@[
+//                          @"None",
+//                          @"None",
+//                          @"Black",
+//                          @"Black",
+//                          @"YES",
+//                          @"0.0",
+//                          ]mutableCopy];
+//        }else if (index==4) {
+//            _configs = [@[
+//                          @"Gray",
+//                          @"None",
+//                          @"White",
+//                          @"White",
+//                          @"YES",
+//                          @"1.0",
+//                          ]mutableCopy];
+//        }else if (index==5) {
+//            _configs = [@[
+//                          @"Red",
+//                          @"None",
+//                          @"Yellow",
+//                          @"Yellow",
+//                          @"YES",
+//                          @"1.0",
+//                          ]mutableCopy];
+//        }
+//    }
     
     self.navigationBarConfig = [self barConfigWithConfigs:_configs];
 }
@@ -146,7 +131,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     barConfig.itemColor = map[configs[RowIndexItemColor]];
     barConfig.showShadowImage = [configs[RowIndexShowShadowImage] isEqualToString:@"YES"]?YES:NO;
     barConfig.backgroundAlpha = [configs[RowIndexBackgroundAlpha] floatValue];
-    barConfig.backgroundHeight = [configs[RowIndexBackgroundHeight] floatValue];
     
     return barConfig;
 }
@@ -219,9 +203,6 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
             break;
         case RowIndexBackgroundAlpha:
             button.dataOfSingleComponentPicker = @[@"1.0",@"0.8",@"0.5",@"0.0"];
-            break;
-        case RowIndexBackgroundHeight:
-            button.dataOfSingleComponentPicker = @[@"-1",@"30",@"20"];
             break;
         default:
             break;

@@ -48,6 +48,15 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     return label;
 }
 
+- (UIView*)ml_backgroundShadowView {
+    for (UIView *subv in self.ml_backgroundView.subviews) {
+        if ([subv isKindOfClass:[UIImageView class]]&&subv.bounds.size.height<=1.0f) {
+            return subv;
+        }
+    }
+    return nil;
+}
+
 - (UIView*)ml_backgroundView {
     static NSString *ivarKey = nil;
     static dispatch_once_t onceToken;
@@ -96,7 +105,9 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     return nil;
 }
 
-- (UINavigationBar*)ml_replicantBarOfSameBackgroundEffect {
+- (UINavigationBar*)ml_replicantBarOfSameBackgroundEffectWithContainerView:(UIView*)containerView {
+    NSAssert(self.window&&[self.window isEqual:containerView.window], @"%@-->\n`containerView.window` must equal to self(UINavigationBar).window",NSStringFromSelector(_cmd));
+    
     UINavigationBar *bar = [UINavigationBar new];
     
     bar.tintColor = self.tintColor;
@@ -110,21 +121,33 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     [bar setBackgroundImage:[self backgroundImageForBarMetrics:UIBarMetricsDefaultPrompt] forBarMetrics:UIBarMetricsDefaultPrompt];
     [bar setBackgroundImage:[self backgroundImageForBarMetrics:UIBarMetricsCompactPrompt] forBarMetrics:UIBarMetricsCompactPrompt];
     
-    //frame and alpha
-    bar.frame = self.frame;
-    bar.alpha = self.alpha;
-    
-    CGRect frame = self.ml_backgroundView.frame;
-    //fix a bug below 8.3
-#warning this bug exists above 8.3
-#warning 当底部是默认颜色的时候，上面是灰色时候，还是会有细的白色线条出现
-    if ([UIDevice currentDevice].systemVersion.doubleValue<8.3f) {
-        CGFloat offset = 1.0f/[UIScreen mainScreen].scale;
-        frame.origin.x -= offset;
-        frame.size.width += offset*2;
+    //frame
+    CGRect frame = self.frame;
+    if (containerView) {
+        frame = [self.superview convertRect:self.frame toView:containerView];
     }
+    if ([UIDevice currentDevice].systemVersion.doubleValue<8.3f) {
+        //below iOS8.3, if only use barTintColor, maybe trigger a bug that display a white line leftside.
+        //We fix it below
+        if (!self.ml_currentBackgroundImage) {
+            CGFloat offset = 1.0f/[UIScreen mainScreen].scale+2.0f;
+            frame.origin.x -= offset;
+            frame.size.width += offset*2;
+        }
+    }
+    bar.frame = frame;
+    
+    CGRect backgroundViewFrame = self.ml_backgroundView.frame;
+    backgroundViewFrame.size.width = bar.frame.size.width;
     bar.ml_backgroundView.frame = frame;
+    
+    //alpha
+    bar.alpha = self.alpha;
     bar.ml_backgroundView.alpha = self.ml_backgroundView.alpha;
+    
+    //shadow image view alpha and hidden
+    bar.ml_backgroundShadowView.hidden = self.ml_backgroundShadowView.hidden;
+    bar.ml_backgroundShadowView.alpha = self.ml_backgroundShadowView.alpha;
     
     //_barPosition is important
     @try {
@@ -152,8 +175,11 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     
     if (!CGSizeEqualToSize(self.frame.size, navigationBar.frame.size)||
         self.alpha!=navigationBar.alpha||
-        !CGSizeEqualToSize([self ml_backgroundView].frame.size, [navigationBar ml_backgroundView].frame.size)||
-        [self ml_backgroundView].alpha != [navigationBar ml_backgroundView].alpha) {
+        !CGSizeEqualToSize(self.ml_backgroundView.frame.size, navigationBar.ml_backgroundView.frame.size)||
+        self.ml_backgroundView.alpha != navigationBar.ml_backgroundView.alpha||
+        self.ml_backgroundShadowView.hidden != navigationBar.ml_backgroundShadowView.hidden ||
+        self.ml_backgroundShadowView.alpha != navigationBar.ml_backgroundShadowView.alpha
+        ) {
         return NO;
     }
     

@@ -59,13 +59,10 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
     if ([self.transitionCoordinator isAnimated]) {
         UIView *containerView = [self.transitionCoordinator containerView];
         if (containerView) {
-            UINavigationBar *fromBar = [self.navigationBar ml_replicantBarOfSameBackgroundEffect];
-            //adjust frame
-            fromBar.frame = [self.navigationBar.superview convertRect:self.navigationBar.frame toView:containerView];
-            self._mlnbt_transitionFromBar = fromBar;
+            self._mlnbt_transitionFromBar = [self.navigationBar ml_replicantBarOfSameBackgroundEffectWithContainerView:containerView];
             
             //maybe _mlnbt_transitionFromBar will be nil in `_mlnbt_startCustomTransition`, so we store it
-            fromTintColor = fromBar.tintColor;
+            fromTintColor = self._mlnbt_transitionFromBar.tintColor;
             
             //back indicator fade out animation
             UIView *backIndicatorView = self.navigationBar.ml_backIndicatorView;
@@ -176,15 +173,10 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
     }
     
     //transitionToBar, the method `viewWillAppear` of toVC is excuted now.
-    navigationController._mlnbt_transitionToBar = [navigationController.navigationBar ml_replicantBarOfSameBackgroundEffect];
-    
     //to bar
     UIView *containerView = [transitionContext containerView];
     if (containerView) {
-        UINavigationBar *toBar = [navigationController.navigationBar ml_replicantBarOfSameBackgroundEffect];;
-        //adjust frame
-        toBar.frame = [navigationController.navigationBar.superview convertRect:navigationController.navigationBar.frame toView:containerView];
-        navigationController._mlnbt_transitionToBar = toBar;
+        navigationController._mlnbt_transitionToBar = [navigationController.navigationBar ml_replicantBarOfSameBackgroundEffectWithContainerView:containerView];
     }
     
     //containerViews

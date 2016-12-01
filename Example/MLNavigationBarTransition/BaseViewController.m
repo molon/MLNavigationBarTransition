@@ -67,12 +67,8 @@ static inline UIImage *kImageWithColor(UIColor *color) {
     self.navigationController.navigationBar.ml_backgroundView.alpha = config?config.backgroundAlpha:1.0f;
     
 #warning zheg ge 设置无效
-    [self.navigationController.navigationBar setShadowImage:config.showShadowImage?nil:[UIImage new]];
-    
-#warning zheg 设置也无效,而且不但无效，还会影响isSameEffect的判断
-    CGRect frame = self.navigationController.navigationBar.ml_backgroundView.frame;
-    frame.size.height = (config&&config.backgroundHeight!=-1)?config.backgroundHeight:self.navigationController.navigationBar.frame.size.height-frame.origin.y;
-    self.navigationController.navigationBar.ml_backgroundView.frame = frame;
+//    [self.navigationController.navigationBar setShadowImage:config.showShadowImage?nil:[UIImage new]];
+    self.navigationController.navigationBar.ml_backgroundShadowView.hidden = config?!config.showShadowImage:NO;
     
     //other default
     

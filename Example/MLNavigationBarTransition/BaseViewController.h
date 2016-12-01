@@ -19,7 +19,6 @@
 @property (nonatomic, assign) BOOL showShadowImage;
 
 @property (nonatomic, assign) CGFloat backgroundAlpha;
-@property (nonatomic, assign) CGFloat backgroundHeight; //if -1,reset to default
 
 @end
 
