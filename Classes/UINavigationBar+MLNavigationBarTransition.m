@@ -34,8 +34,6 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
 }
 
 - (UILabel*)ml_backButtonLabel {
-    UINavigationItem *backItem = self.backItem;
-    
     UILabel *label = nil;
     @try {
         UIView *backButtonView = [self.backItem valueForKey:@"_backButtonView"];

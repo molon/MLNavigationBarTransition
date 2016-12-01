@@ -40,6 +40,9 @@ static inline UIImage *_mlnbt_snapshotWithView(UIView *view, BOOL afterUpdates) 
         BOOL valid = mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:))&&
         mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:))&&
         mlnbt_exchangeInstanceMethod(self, @selector(_startCustomTransition:), @selector(_mlnbt_startCustomTransition:));
+        if (!valid) {
+            NSLog(@"UINavigationController (MLNavigationBarTransition) is not valid now! Please check it.");
+        }
         NSAssert(valid, @"UINavigationController (MLNavigationBarTransition) is not valid now! Please check it.");
 #pragma clang diagnostic pop
     });
@@ -118,6 +121,9 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
         
         BOOL valid = mlnbt_exchangeInstanceMethod(cls,@selector(animateTransition:),@selector(_mlnbt_animateTransition:))&&
         mlnbt_exchangeInstanceMethod(cls,@selector(animationEnded:),@selector(_mlnbt_animationEnded:));
+        if (!valid) {
+            NSLog(@"NSObject(MLNavigationBarTransition) is not valid now! Please check it.");
+        }
         NSAssert(valid, @"NSObject(MLNavigationBarTransition) is not valid now! Please check it.");
     });
 }
