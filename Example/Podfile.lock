@@ -1,19 +1,16 @@
 PODS:
   - MLNavigationBarTransition (0.0.1)
-  - MLTransition (2.1.2)
 
 DEPENDENCIES:
   - MLNavigationBarTransition (from `../MLNavigationBarTransition.podspec`)
-  - MLTransition (~> 2.1.2)
 
 EXTERNAL SOURCES:
   MLNavigationBarTransition:
     :path: "../MLNavigationBarTransition.podspec"
 
 SPEC CHECKSUMS:
-  MLNavigationBarTransition: f6d881c2b18b80c5b14e0b51a65a17191a737180
-  MLTransition: 26751adac088c07e4df48c9f605cfdd767bb8afa
+  MLNavigationBarTransition: 7ea89d2f857f0799a20ffe1a5035b1d3d3a31f03
 
-PODFILE CHECKSUM: f03d0520d967396f8f27c942de56700749119edc
+PODFILE CHECKSUM: 4c5a2bd9798c943e8b8f3cd53b3c16910df37938
 
 COCOAPODS: 1.1.1

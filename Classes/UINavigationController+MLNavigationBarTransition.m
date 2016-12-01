@@ -12,6 +12,14 @@
 
 MLNBT_SYNTH_DUMMY_CLASS(UINavigationController_MLNavigationBarTransition)
 
+static inline UIImage *_mlnbt_snapshotWithView(UIView *view, BOOL afterUpdates) {
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0);
+    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:afterUpdates];
+    UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return snap;
+}
+
 #pragma mark - UINavigationController(MLNavigationBarTransition)
 
 @interface UINavigationController()
@@ -67,7 +75,11 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
             //back indicator fade out animation
             UIView *backIndicatorView = self.navigationBar.ml_backIndicatorView;
             if (backIndicatorView) {
-                UIView *backIndicatorSnapshotView = [backIndicatorView snapshotViewAfterScreenUpdates:NO];
+                //Because there are some bugs with `snapshotViewAfterScreenUpdates:`, we abandon it
+//                UIView *backIndicatorSnapshotView = [backIndicatorView snapshotViewAfterScreenUpdates:NO];
+                
+                UIImageView *backIndicatorSnapshotView = [[UIImageView alloc]initWithImage:_mlnbt_snapshotWithView(backIndicatorView,NO)];
+                backIndicatorSnapshotView.alpha = backIndicatorView.alpha;
                 
                 backIndicatorSnapshotView.frame = backIndicatorView.frame;
                 [backIndicatorView.superview addSubview:backIndicatorSnapshotView];

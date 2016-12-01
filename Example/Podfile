@@ -7,6 +7,5 @@ workspace 'MLNavigationBarTransition.xcworkspace'
 target 'MLNavigationBarTransition' do
 	project 'MLNavigationBarTransition.xcodeproj'
     
-    pod 'MLTransition', '~> 2.1.2'
     pod 'MLNavigationBarTransition', :path => '../MLNavigationBarTransition.podspec'
 end

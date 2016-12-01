@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 s.name         = "MLNavigationBarTransition"
 s.version      = "0.0.1"
-s.summary      = "自用"
+s.summary      = "Advanced navigation bar transition based on official push-pop transition"
 
 s.homepage     = 'https://github.com/molon/MLNavigationBarTransition'
 s.license      = { :type => 'MIT'}
