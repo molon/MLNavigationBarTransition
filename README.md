@@ -1,5 +1,9 @@
 # MLNavigationBarTransition [中文介绍](https://github.com/molon/MLNavigationBarTransition#中文介绍)
 
+##Screenshot
+![MLNavigationBarTransition](https://raw.githubusercontent.com/molon/MLNavigationBarTransition/master/snapshot.gif)
+
+##Introduction
 Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigationBarTransition). First of all, this statement and thanks. But due to individual details can not meet personal preferences, with a completely different violent way to re-build a wheel.
   
 **The libirary uses a lot of unpublish apis(not private). But it's ok in my experience. If you are worried, please do not use it.**
@@ -10,8 +14,6 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 - If the two pages have exactly the same navigation bar background effect, official effect will appear.
 - If backButtons of two pages have different `tintColor`, a fade effect not like official will appear.
 - Fixed a bug that caused flicker when two pages have different `barTintColor` on iOS 8.2 or below.
-
-![MLNavigationBarTransition](https://raw.githubusercontent.com/molon/MLNavigationBarTransition/master/snapshot.gif)
 
 ###Addition Tips
 
@@ -32,7 +34,6 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 - 如果两个页面的导航条返回按钮有不一样的`tintColor`，转场时候会有一个过渡效果，不会像原生那样立即就改变为目的`tintColor`。
 - 在iOS 8.2或以下系统，如果两个页面的`barTintColor`不一样，可能会出现闪烁现象的BUG修复。
 - 对子页面的`view`没有任何侵入。
-![MLNavigationBarTransition](https://raw.githubusercontent.com/molon/MLNavigationBarTransition/master/snapshot.gif)
 
 ###一些提示
 - 请不要设置`navigationBarHidden`为`YES`，如果想隐藏导航条，请使用`self.navigationBar.ml_backgroundView.alpha = 0.0f;`
