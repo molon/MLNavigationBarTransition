@@ -31,6 +31,7 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 - 如果两个页面具有完完全全一模一样的导航条背景效果，使用原生转场效果。
 - 如果两个页面的导航条返回按钮有不一样的`tintColor`，转场时候会有一个过渡效果，不会像原生那样立即就改变为目的`tintColor`。
 - 在iOS 8.2或以下系统，如果两个页面的`barTintColor`不一样，可能会出现闪烁现象的BUG修复。
+- 对子页面的`view`没有任何侵入。
 ![MLNavigationBarTransition](https://raw.githubusercontent.com/molon/MLNavigationBarTransition/master/snapshot.gif)
 
 ###一些提示
