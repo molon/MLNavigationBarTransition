@@ -10,7 +10,7 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 
 - Only support for iOS7+.
 - If two pages have different navigation bar background effect, an overlay effect not like official will appear.
-- If an overlay effect appears, the shadow border will certainly be displayed in the middle. Regardless of whether the ` translucent` of the navigation bar is `YES`.
+- If an overlay effect appears or navigation bar's `alpha` less than `1.0f`, the shadow border will certainly be displayed in the middle. Regardless of whether the ` translucent` of the navigation bar is `YES`.
 - If the two pages have exactly the same navigation bar background effect, official effect will appear.
 - If backButtons of two pages have different `tintColor`, a fade effect not like official will appear.
 - Fixed a bug that caused flicker when two pages have different `barTintColor` on iOS 8.2 or below.
@@ -19,7 +19,7 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 
 - Please do not set `navigationBarHidden` to` YES`(it has bugs). If you want to hide the navigation bar, use `self.navigationBar.ml_backgroundView.alpha = 0.0f;`
 - If you want to hide the bottom shadow of the navigation bar, use `self.navigationController.navigationBar.ml_backgroundShadowView.hidden = YES`
-- Keep `translucent` as` YES` as far as possible, because if it is `NO`, the head of the page in the navigator will remain under the navigation bar, so if you make the navigation bar transparent, will reveal views below, resulting in abnormal results.
+- Keep `translucent` as` YES` as far as possible, because if it is `NO`, the head of the page in the navigator will remain under the navigation bar, so if the navigation bar's `alpha` less than `1.0f`, will reveal views below, resulting in abnormal results.
 
 ##中文介绍
 一直想做个类似微信转场里导航条效果的库，并且一直苦于SDK里`navigationBarHidden`为`YES`时候的BUG没能良好解决。
