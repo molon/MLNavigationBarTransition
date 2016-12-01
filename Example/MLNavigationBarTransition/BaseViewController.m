@@ -66,8 +66,7 @@ static inline UIImage *kImageWithColor(UIColor *color) {
     //alpha
     self.navigationController.navigationBar.ml_backgroundView.alpha = config?config.backgroundAlpha:1.0f;
     
-#warning zheg ge 设置无效
-//    [self.navigationController.navigationBar setShadowImage:config.showShadowImage?nil:[UIImage new]];
+    //shadow hidden
     self.navigationController.navigationBar.ml_backgroundShadowView.hidden = config?!config.showShadowImage:NO;
     
     //other default

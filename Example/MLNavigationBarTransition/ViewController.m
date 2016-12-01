@@ -60,6 +60,9 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
                       @"YES",
                       @"1.0",
                       ]mutableCopy];
+    }else{
+        
+        self.navigationBarConfig = [self barConfigWithConfigs:_configs];
     }
 //    else{
 //        //simple test
@@ -93,7 +96,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 //        }
 //    }
     
-    self.navigationBarConfig = [self barConfigWithConfigs:_configs];
+//    self.navigationBarConfig = [self barConfigWithConfigs:_configs];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

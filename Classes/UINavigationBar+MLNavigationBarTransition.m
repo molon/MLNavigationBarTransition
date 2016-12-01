@@ -135,6 +135,7 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
             frame.size.width += offset*2;
         }
     }
+#warning 在没给予特殊的barTintColor的时候这里赋值完frame，ml_backgroundShadowView不会生成，所以就影响了下面的逻辑，需要想办法fix
     bar.frame = frame;
     
     CGRect backgroundViewFrame = self.ml_backgroundView.frame;
@@ -146,8 +147,8 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     bar.ml_backgroundView.alpha = self.ml_backgroundView.alpha;
     
     //shadow image view alpha and hidden
-    bar.ml_backgroundShadowView.hidden = self.ml_backgroundShadowView.hidden;
     bar.ml_backgroundShadowView.alpha = self.ml_backgroundShadowView.alpha;
+    bar.ml_backgroundShadowView.hidden = self.ml_backgroundShadowView.hidden;
     
     //_barPosition is important
     @try {
@@ -177,8 +178,8 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
         self.alpha!=navigationBar.alpha||
         !CGSizeEqualToSize(self.ml_backgroundView.frame.size, navigationBar.ml_backgroundView.frame.size)||
         self.ml_backgroundView.alpha != navigationBar.ml_backgroundView.alpha||
-        self.ml_backgroundShadowView.hidden != navigationBar.ml_backgroundShadowView.hidden ||
-        self.ml_backgroundShadowView.alpha != navigationBar.ml_backgroundShadowView.alpha
+        self.ml_backgroundShadowView.alpha != navigationBar.ml_backgroundShadowView.alpha||
+        self.ml_backgroundShadowView.hidden != navigationBar.ml_backgroundShadowView.hidden
         ) {
         return NO;
     }
