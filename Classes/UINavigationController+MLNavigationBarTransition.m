@@ -78,7 +78,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
             //back indicator fade out animation
             UIView *backIndicatorView = self.navigationBar.ml_backIndicatorView;
             if (backIndicatorView) {
-                //Because there are some bugs with `snapshotViewAfterScreenUpdates:`, we abandon it
+                //Because `snapshotViewAfterScreenUpdates:` has some bugs, we abandon it
 //                UIView *backIndicatorSnapshotView = [backIndicatorView snapshotViewAfterScreenUpdates:NO];
                 
                 UIImageView *backIndicatorSnapshotView = [[UIImageView alloc]initWithImage:_mlnbt_snapshotWithView(backIndicatorView,NO)];
@@ -190,7 +190,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
         return;
     }
     
-    //transitionToBar, the method `viewWillAppear` of toVC is excuted now.
+    //transitionToBar, `viewWillAppear` of toVC has excuted now.
     //to bar
     UIView *containerView = [transitionContext containerView];
     if (containerView) {
