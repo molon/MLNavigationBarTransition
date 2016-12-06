@@ -5,8 +5,6 @@
 
 ##Introduction
 Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigationBarTransition). First of all, this statement and thanks. But due to individual details can not meet personal preferences, with a completely different violent way to re-build a wheel.
-  
-**The libirary uses a lot of unpublish apis(not private). But it's ok in my experience. If you are worried, please do not use it.**
 
 - Only support for iOS7+.
 - If two pages have different navigation bar background effect, an overlay effect not like official will appear.
@@ -24,8 +22,6 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 ##中文介绍
 一直想做个类似微信转场里导航条效果的库，并且一直苦于SDK里`navigationBarHidden`为`YES`时候的BUG没能良好解决。
 在发现了[KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigationBarTransition)之后得到灵感，首先对此表示声明以及感谢，但是由于个别细节无法满足个人喜好，就用了完全不一样的比较暴力的方式重新造了个轮子。
-
-**本库大量的使用了 未发布的API (不是私有API)，但是从以往经验来看，这对审核是没问题的。如果对此有担心，请不要使用它。**
 
 - 只支持iOS7+
 - 如果两个页面有不一样的导航条背景效果的话，转场时候将会出现导航条叠加的效果。(即使只有底部阴影条显示透明度不同这种细节，也会被认作不同)
