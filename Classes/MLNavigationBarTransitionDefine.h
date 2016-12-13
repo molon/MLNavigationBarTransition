@@ -48,8 +48,8 @@ static inline BOOL mlnbt_exchangeInstanceMethod(Class cls, SEL originalSel, SEL 
 
 
 #define MLNBT_SYNTH_DUMMY_CLASS(_name_) \
-@interface SYNTH_DUMMY_CLASS_ ## _name_ : NSObject @end \
-@implementation SYNTH_DUMMY_CLASS_ ## _name_ @end
+@interface MLNBT_SYNTH_DUMMY_CLASS ## _name_ : NSObject @end \
+@implementation MLNBT_SYNTH_DUMMY_CLASS ## _name_ @end
 
 
 #define MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_getter_, _setter_, _association_, _type_) \

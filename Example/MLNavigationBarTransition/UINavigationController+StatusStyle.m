@@ -10,8 +10,12 @@
 
 @implementation UINavigationController (StatusStyle)
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return [self.topViewController preferredStatusBarStyle];
+- (UIViewController *)childViewControllerForStatusBarStyle {
+    return self.topViewController;
+}
+
+- (UIViewController *)childViewControllerForStatusBarHidden {
+    return self.topViewController;
 }
 
 @end
