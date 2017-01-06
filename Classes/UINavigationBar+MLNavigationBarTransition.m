@@ -8,6 +8,7 @@
 
 #import "UINavigationBar+MLNavigationBarTransition.h"
 #import "MLNavigationBarTransitionDefine.h"
+#import "NSString+MLNavigationBarTransition_Encrypt.h"
 
 MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
 
@@ -17,7 +18,8 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     static NSString *ivarKey = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSArray *keys = @[@"_backIndicatorView"];
+    //    NSLog(@"%@:%@",@"_backIndicatorView",[@"_backIndicatorView" mlnbt_EncryptString]);
+        NSArray *keys = @[[@"K2WuL2gWozEcL2S0o3WJnJI3" mlnbt_DecryptString]];
         for (NSString *key in keys) {
             if (mlnbt_doesIvarExistWithName([self class], key)) {
                 ivarKey = key;
@@ -36,7 +38,8 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
 - (UILabel*)ml_backButtonLabel {
     UILabel *label = nil;
     @try {
-        UIView *backButtonView = [self.backItem valueForKey:@"_backButtonView"];
+    //    NSLog(@"%@:%@",@"_backButtonView",[@"_backButtonView" mlnbt_EncryptString]);
+        UIView *backButtonView = [self.backItem valueForKey:[@"K2WuL2gPqKE0o25JnJI3" mlnbt_DecryptString]];
         label = [backButtonView valueForKey:@"_label"];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
@@ -59,7 +62,9 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     static NSString *ivarKey = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSArray *keys = @[@"_barBackgroundView",@"_backgroundView"];
+      //  NSLog(@"%@:%@",@"_barBackgroundView",[@"_barBackgroundView" mlnbt_EncryptString]);
+      //  NSLog(@"%@:%@",@"_backgroundView",[@"_backgroundView" mlnbt_EncryptString]);
+        NSArray *keys = @[[@"K2WupxWuL2gapz91ozEJnJI3" mlnbt_DecryptString],[@"K2WuL2gapz91ozEJnJI3" mlnbt_DecryptString]];
         for (NSString *key in keys) {
             if (mlnbt_doesIvarExistWithName([self class], key)) {
                 ivarKey = key;
@@ -79,7 +84,8 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     static NSString *ivarKey = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSArray *keys = @[@"_backgroundImage"];
+    //    NSLog(@"%@:%@",@"_backgroundImage",[@"_backgroundImage" mlnbt_EncryptString]);
+        NSArray *keys = @[[@"K2WuL2gapz91ozEWoJSaMD==" mlnbt_DecryptString]];
         for (NSString *key in keys) {
             if (mlnbt_doesIvarExistWithName([self.ml_backgroundView class], key)) {
                 ivarKey = key;
@@ -153,7 +159,8 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     
     //_barPosition is important
     @try {
-        [bar setValue:@(self.barPosition) forKey:@"_barPosition"];
+    //    NSLog(@"%@:%@",@"_barPosition",[@"_barPosition" mlnbt_EncryptString]);
+        [bar setValue:@(self.barPosition) forKey:[@"K2WupyOip2y0nJ9h" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
         NSAssert(NO, @"setting _barPosition is not valid");

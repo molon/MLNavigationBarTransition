@@ -9,6 +9,7 @@
 #import "UINavigationController+MLNavigationBarTransition.h"
 #import "MLNavigationBarTransitionDefine.h"
 #import "UINavigationBar+MLNavigationBarTransition.h"
+#import "NSString+MLNavigationBarTransition_Encrypt.h"
 
 MLNBT_SYNTH_DUMMY_CLASS(UINavigationController_MLNavigationBarTransition)
 
@@ -117,7 +118,8 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        Class cls = NSClassFromString(@"_UINavigationParallaxTransition");
+      //  NSLog(@"%@:%@",@"_UINavigationParallaxTransition",[@"_UINavigationParallaxTransition" mlnbt_EncryptString]);
+        Class cls = NSClassFromString([@"K1IWGzS2nJquqTyioyOupzSfoTS4IUWuoaAcqTyiot==" mlnbt_DecryptString]);
         
         BOOL valid = mlnbt_exchangeInstanceMethod(cls,@selector(animateTransition:),@selector(_mlnbt_animateTransition:))&&
         mlnbt_exchangeInstanceMethod(cls,@selector(animationEnded:),@selector(_mlnbt_animationEnded:));
@@ -131,7 +133,8 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 #pragma mark - helper
 - (UIView*)_mlnbt_shadowBorderViewForUINavigationParallaxTransition {
     @try {
-        UIView *dimmingView = [self valueForKey:@"_borderDimmingView"];
+        // NSLog(@"%@:%@",@"_borderDimmingView",[@"_borderDimmingView" mlnbt_EncryptString]);
+        UIView *dimmingView = [self valueForKey:[@"K2WipzEypxEcoJ1cozqJnJI3" mlnbt_DecryptString]];
         if (dimmingView) {
             UIImageView *imageView = nil;
             for (UIView *v in dimmingView.subviews) {
@@ -151,7 +154,8 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 
 - (UIView*)_mlnbt_containerFromViewForUINavigationParallaxTransition {
     @try {
-        return [self valueForKey:@"containerFromView"];
+     //   NSLog(@"%@:%@",@"containerFromView",[@"containerFromView" mlnbt_EncryptString]);
+        return [self valueForKey:[@"L29hqTScozIlEaWioIMcMKp=" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
         NSAssert(NO, @"`containerFromView` key of UINavigationParallaxTransition is not valid");
@@ -161,7 +165,8 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 
 - (UIView*)_mlnbt_containerToViewForUINavigationParallaxTransition {
     @try {
-        return [self valueForKey:@"containerToView"];
+    //    NSLog(@"%@:%@",@"containerToView",[@"containerToView" mlnbt_EncryptString]);
+        return [self valueForKey:[@"L29hqTScozIlIT9JnJI3" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
         NSAssert(NO, @"`containerToView` key of UINavigationParallaxTransition is not valid");
@@ -171,7 +176,8 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 
 - (id<UIViewControllerContextTransitioning>)_mlnbt_transitionContextForUINavigationParallaxTransition {
     @try {
-        return [self valueForKey:@"transitionContext"];
+    //    NSLog(@"%@:%@",@"transitionContext",[@"transitionContext" mlnbt_EncryptString]);
+        return [self valueForKey:[@"qUWuoaAcqTyioxAioaEyrUD=" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
         NSAssert(NO, @"`transitionContext` key of UINavigationParallaxTransition is not valid");
