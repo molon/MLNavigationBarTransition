@@ -213,4 +213,14 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     return NO;
 }
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    UIView *r = [super hitTest:point withEvent:event];
+    if (self.ml_backgroundView.alpha<=0.000001f) {
+        if ([r isEqual:self]||[r isEqual:self.ml_backgroundView]) {
+            return nil;
+        }
+    }
+    return r;
+}
+
 @end
