@@ -12,6 +12,13 @@
 
 MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
 
+@interface UINavigationBar(MLNavigationBarTransition_Unpublic)
+
+- (BOOL)_shouldPopForTouchAtPoint:(CGPoint)point;
+- (BOOL)_hasBackButton;
+
+@end
+
 @implementation UINavigationBar (MLNavigationBarTransition)
 
 - (UIView*)ml_backIndicatorView {
@@ -213,10 +220,30 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     return NO;
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    UIView *r = [super hitTest:point withEvent:event];
-    if (self.ml_backgroundView.alpha<=0.000001f) {
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BOOL valid = mlnbt_exchangeInstanceMethod(self, @selector(hitTest:withEvent:), @selector(_mlnbt_hitTest:withEvent:));
+        if (!valid) {
+            NSLog(@"Hook on UINavigationBar (MLNavigationBarTransition) is not valid now! Please check it.");
+        }
+    });
+}
+
+- (UIView *)_mlnbt_hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    UIView *r = [self _mlnbt_hitTest:point withEvent:event];
+    if (self.ml_backgroundView.alpha==0.0f) {
         if ([r isEqual:self]||[r isEqual:self.ml_backgroundView]) {
+            //Because although touching back button area, the r is always the bar. so we need do extra checking.
+            @try {
+                if ([self _hasBackButton]&&[self _shouldPopForTouchAtPoint:point]) {
+                    return r;
+                }
+            } @catch (NSException *exception) {
+                NSLog(@"_hasBackButton or _shouldPopForTouchAtPoint of UINavigationBar is not exist now!");
+                return nil;
+            }
+            
             return nil;
         }
     }
