@@ -38,8 +38,8 @@ static inline UIImage *_mlnbt_snapshotWithView(UIView *view, BOOL afterUpdates) 
         
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-        BOOL valid = mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:))&&
-        mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:))&&
+        BOOL valid = /*mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:))&&
+        mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:))&&*/
         mlnbt_exchangeInstanceMethod(self, @selector(_startCustomTransition:), @selector(_mlnbt_startCustomTransition:));
         if (!valid) {
             NSLog(@"UINavigationController (MLNavigationBarTransition) is not valid now! Please check it.");
@@ -54,16 +54,16 @@ static inline UIImage *_mlnbt_snapshotWithView(UIView *view, BOOL afterUpdates) 
 MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionFromBar, set_mlnbt_transitionFromBar:, RETAIN_NONATOMIC, UINavigationBar *)
 MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:, RETAIN_NONATOMIC, UINavigationBar *)
 
-#pragma mark - disable navigationBarHidden
-- (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
-    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundView.alpha = 0.0f;`");
-    [self _mlnbt_setNavigationBarHidden:navigationBarHidden];
-}
-
-- (void)_mlnbt_setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
-    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundView.alpha = 0.0f;`");
-    [self _mlnbt_setNavigationBarHidden:hidden animated:animated];
-}
+//#pragma mark - disable navigationBarHidden
+//- (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
+//    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundView.alpha = 0.0f;`");
+//    [self _mlnbt_setNavigationBarHidden:navigationBarHidden];
+//}
+//
+//- (void)_mlnbt_setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
+//    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundView.alpha = 0.0f;`");
+//    [self _mlnbt_setNavigationBarHidden:hidden animated:animated];
+//}
 
 - (void)_mlnbt_startCustomTransition:(id)arg1 {
     UIColor *fromTintColor = nil;
