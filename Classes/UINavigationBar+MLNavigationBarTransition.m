@@ -117,8 +117,6 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
 }
 
 - (UINavigationBar*)ml_replicantBarOfSameBackgroundEffectWithContainerView:(UIView*)containerView {
-    NSAssert(self.window&&[self.window isEqual:containerView.window], @"%@-->\n`containerView.window` must equal to self(UINavigationBar).window",NSStringFromSelector(_cmd));
-    
     UINavigationBar *bar = [UINavigationBar new];
     
     bar.tintColor = self.tintColor;
@@ -134,8 +132,28 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
     //frame
     CGRect frame = self.frame;
     if (containerView) {
-        frame = [self.superview convertRect:self.frame toView:containerView];
+        CGRect (^convertRectToViewOrWindowBlock)(UIView *fromView, CGRect rect, UIView *view) = ^(UIView *fromView, CGRect rect, UIView *view){
+            if (!view) {
+                if ([fromView isKindOfClass:[UIWindow class]]) {
+                    return [((UIWindow *)fromView) convertRect:rect toWindow:nil];
+                } else {
+                    return [fromView convertRect:rect toView:nil];
+                }
+            }
+            
+            UIWindow *from = [fromView isKindOfClass:[UIWindow class]] ? (id)fromView : fromView.window;
+            UIWindow *to = [view isKindOfClass:[UIWindow class]] ? (id)view : view.window;
+            if (!from || !to) return [fromView convertRect:rect toView:view];
+            if (from == to) return [fromView convertRect:rect toView:view];
+            rect = [fromView convertRect:rect toView:from];
+            rect = [to convertRect:rect fromWindow:from];
+            rect = [view convertRect:rect fromView:to];
+            return rect;
+        };
+        
+        frame = convertRectToViewOrWindowBlock(self.superview,self.frame,containerView);
     }
+    
     if ([UIDevice currentDevice].systemVersion.doubleValue<8.3f) {
         //below iOS8.3, if only use barTintColor, maybe trigger a bug that display a white line leftside.
         //We fix it below
