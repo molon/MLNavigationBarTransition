@@ -100,10 +100,13 @@ MLNBT_SYNTH_DUMMY_CLASS(UINavigationBar_MLNavigationBarTransition)
             }
         }
         if (!ivarKey) {
+//            NSLog(@"%@:%@",@"_currentCustomBackground",[@"_currentCustomBackground" mlnbt_EncryptString]);
+            
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-            if ([self.ml_backgroundView respondsToSelector:@selector(_currentCustomBackground)]) {
-                ivarKey = @"_currentCustomBackground";
+            NSString *selName = [@"K2A1paWyoaEQqKA0o21PLJAeM3WiqJ5x" mlnbt_DecryptString];
+            if ([self.ml_backgroundView respondsToSelector:NSSelectorFromString(selName)]) {
+                ivarKey = selName;
             }
 #pragma clang diagnostic pop
         }

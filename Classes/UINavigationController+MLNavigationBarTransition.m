@@ -38,9 +38,10 @@ static inline UIImage *_mlnbt_snapshotWithView(UIView *view, BOOL afterUpdates) 
         
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
+//          NSLog(@"%@:%@",@"_startCustomTransition:",[@"_startCustomTransition:" mlnbt_EncryptString]);
         BOOL valid = /*mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:))&&
         mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:))&&*/
-        mlnbt_exchangeInstanceMethod(self, @selector(_startCustomTransition:), @selector(_mlnbt_startCustomTransition:));
+        mlnbt_exchangeInstanceMethod(self,NSSelectorFromString([@"K3A0LKW0D3ImqT9gIUWuoaAcqTyiowb=" mlnbt_DecryptString]), @selector(_mlnbt_startCustomTransition:));
         if (!valid) {
             NSLog(@"UINavigationController (MLNavigationBarTransition) is not valid now! Please check it.");
         }
