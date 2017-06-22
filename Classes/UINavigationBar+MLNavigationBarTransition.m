@@ -459,7 +459,7 @@ struct dummy arg = va_arg(args, struct dummy); \
         [bar setValue:@(self.barPosition) forKey:[@"K2WupyOip2y0nJ9h" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
-        NSAssert(NO, @"setting _barPosition is not valid");
+        NSAssert(NO, @"setting $barPosition is not valid");
         return nil;
     }
     
@@ -533,7 +533,7 @@ struct dummy arg = va_arg(args, struct dummy); \
                     return r;
                 }
             } @catch (NSException *exception) {
-                NSLog(@"_hasBackButton or _shouldPopForTouchAtPoint of UINavigationBar is not exist now!");
+                NSLog(@"$hasBackButton or $shouldPopForTouchAtPoint of UINavigationBar is not exist now!");
                 return nil;
             }
             
