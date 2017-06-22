@@ -293,7 +293,7 @@ struct dummy arg = va_arg(args, struct dummy); \
     static NSString *ivarKey = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-    //    NSLog(@"%@:%@",@"_backIndicatorView",[@"_backIndicatorView" mlnbt_EncryptString]);
+        //    NSLog(@"%@:%@",@"_backIndicatorView",[@"_backIndicatorView" mlnbt_EncryptString]);
         NSArray *keys = @[[@"K2WuL2gWozEcL2S0o3WJnJI3" mlnbt_DecryptString]];
         for (NSString *key in keys) {
             if (mlnbt_doesIvarExistWithName([self class], key)) {
@@ -313,7 +313,7 @@ struct dummy arg = va_arg(args, struct dummy); \
 - (UILabel*)ml_backButtonLabel {
     UILabel *label = nil;
     @try {
-    //    NSLog(@"%@:%@",@"_backButtonView",[@"_backButtonView" mlnbt_EncryptString]);
+        //    NSLog(@"%@:%@",@"_backButtonView",[@"_backButtonView" mlnbt_EncryptString]);
         UIView *backButtonView = [self.backItem valueForKey:[@"K2WuL2gPqKE0o25JnJI3" mlnbt_DecryptString]];
         label = [backButtonView valueForKey:@"_label"];
     } @catch (NSException *exception) {
@@ -337,8 +337,8 @@ struct dummy arg = va_arg(args, struct dummy); \
     static NSString *ivarKey = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-      //  NSLog(@"%@:%@",@"_barBackgroundView",[@"_barBackgroundView" mlnbt_EncryptString]);
-      //  NSLog(@"%@:%@",@"_backgroundView",[@"_backgroundView" mlnbt_EncryptString]);
+        //  NSLog(@"%@:%@",@"_barBackgroundView",[@"_barBackgroundView" mlnbt_EncryptString]);
+        //  NSLog(@"%@:%@",@"_backgroundView",[@"_backgroundView" mlnbt_EncryptString]);
         NSArray *keys = @[[@"K2WupxWuL2gapz91ozEJnJI3" mlnbt_DecryptString],[@"K2WuL2gapz91ozEJnJI3" mlnbt_DecryptString]];
         for (NSString *key in keys) {
             if (mlnbt_doesIvarExistWithName([self class], key)) {
@@ -359,7 +359,7 @@ struct dummy arg = va_arg(args, struct dummy); \
     static NSString *ivarKey = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-    //    NSLog(@"%@:%@",@"_backgroundImage",[@"_backgroundImage" mlnbt_EncryptString]);
+        //    NSLog(@"%@:%@",@"_backgroundImage",[@"_backgroundImage" mlnbt_EncryptString]);
         NSArray *keys = @[[@"K2WuL2gapz91ozEWoJSaMD==" mlnbt_DecryptString]];
         for (NSString *key in keys) {
             if (mlnbt_doesIvarExistWithName([self.ml_backgroundView class], key)) {
@@ -368,7 +368,7 @@ struct dummy arg = va_arg(args, struct dummy); \
             }
         }
         if (!ivarKey) {
-//            NSLog(@"%@:%@",@"_currentCustomBackground",[@"_currentCustomBackground" mlnbt_EncryptString]);
+            //            NSLog(@"%@:%@",@"_currentCustomBackground",[@"_currentCustomBackground" mlnbt_EncryptString]);
             
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
@@ -455,7 +455,7 @@ struct dummy arg = va_arg(args, struct dummy); \
     
     //_barPosition is important
     @try {
-    //    NSLog(@"%@:%@",@"_barPosition",[@"_barPosition" mlnbt_EncryptString]);
+        //    NSLog(@"%@:%@",@"_barPosition",[@"_barPosition" mlnbt_EncryptString]);
         [bar setValue:@(self.barPosition) forKey:[@"K2WupyOip2y0nJ9h" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
@@ -525,10 +525,14 @@ struct dummy arg = va_arg(args, struct dummy); \
         if ([r isEqual:self]||[r isEqual:self.ml_backgroundView]) {
             //Because although touching back button area, the r is always the bar. so we need do extra checking.
             @try {
-//                    NSLog(@"%@->%@",@"_hasBackButton",[@"_hasBackButton" mlnbt_EncryptString]);
-//                    NSLog(@"%@->%@",@"_shouldPopForTouchAtPoint:",[@"_shouldPopForTouchAtPoint:" mlnbt_EncryptString]);
-                BOOL hasBackButton = [self performSelector:NSSelectorFromString([@"K2uup0WuL2gPqKE0o24=" mlnbt_DecryptString])];
+                
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+                //                    NSLog(@"%@->%@",@"_hasBackButton",[@"_hasBackButton" mlnbt_EncryptString]);
+                //                    NSLog(@"%@->%@",@"_shouldPopForTouchAtPoint:",[@"_shouldPopForTouchAtPoint:" mlnbt_EncryptString]);
+                BOOL hasBackButton = [[self mlnbt_performSelectorWithArgs:NSSelectorFromString([@"K2uup0WuL2gPqKE0o24=" mlnbt_DecryptString])]boolValue];
                 BOOL shouldPopForTouchAtPoint = [[self mlnbt_performSelectorWithArgs:NSSelectorFromString([@"K3Abo3IfMSOipRMipyEiqJAbDKEDo2yhqQb=" mlnbt_DecryptString]),point]boolValue];
+#pragma clang diagnostic pop
                 if (hasBackButton&&shouldPopForTouchAtPoint) {
                     return r;
                 }
