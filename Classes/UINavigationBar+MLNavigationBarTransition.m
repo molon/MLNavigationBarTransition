@@ -306,7 +306,7 @@ struct dummy arg = va_arg(args, struct dummy); \
         return [self valueForKey:ivarKey];
     }
     
-    NSAssert(NO, @"ml_backgroundView is not valid");
+    NSAssert(NO, @"ml_backIndicatorView is not valid");
     return nil;
 }
 
@@ -537,7 +537,7 @@ struct dummy arg = va_arg(args, struct dummy); \
                     return r;
                 }
             } @catch (NSException *exception) {
-                NSLog(@"$hasBackButton or $shouldPopForTouchAtPoint of UINavigationBar is not exist now!");
+                NSLog(@"hasBackButton or shouldPopForTouchAtPoint of UINavigationBar is not exist now!");
                 return nil;
             }
             
