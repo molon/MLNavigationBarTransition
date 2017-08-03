@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  The colored background view of bar
+ @warning Can't set ml_backgroundView.alpha directly, please use `setMl_backgroundAlpha:`
  */
 @property (nullable, nonatomic, strong, readonly) UIView *ml_backgroundView;
 
@@ -36,6 +37,12 @@ NS_ASSUME_NONNULL_BEGIN
  Current displaying backgroundImage
  */
 @property (nullable, nonatomic, strong, readonly) UIImage *ml_currentBackgroundImage;
+
+/**
+ Current displaying background alpha
+ @warning If you want to change ml_backgroundView.alpha, please use this.
+ */
+@property (nonatomic, assign) CGFloat ml_backgroundAlpha;
 
 /**
  Returns a replicant of the same background effect

@@ -21,6 +21,34 @@ static inline UIImage *_mlnbt_snapshotWithView(UIView *view, BOOL afterUpdates) 
     return snap;
 }
 
+#pragma mark - UIView(_MLNavigationBarTransition)
+@interface UIView (_MLNavigationBarTransition)
+
+@property (nonatomic, assign) BOOL _mlnbt_disableSettingHidden;
+
+@end
+
+@implementation UIView (_MLNavigationBarTransition)
+
+MLNBT_SYNTH_DYNAMIC_PROPERTY_CTYPE(_mlnbt_disableSettingHidden, set_mlnbt_disableSettingHidden:, BOOL)
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        mlnbt_exchangeInstanceMethod(self, @selector(setHidden:), @selector(_mlnbt_setHidden:));
+    });
+}
+
+- (void)_mlnbt_setHidden:(BOOL)hidden {
+    if (self._mlnbt_disableSettingHidden) {
+        return;
+    }
+    
+    [self _mlnbt_setHidden:hidden];
+}
+
+@end
+
 #pragma mark - UINavigationController(MLNavigationBarTransition)
 
 @interface UINavigationController()
@@ -57,12 +85,12 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 
 //#pragma mark - disable navigationBarHidden
 //- (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
-//    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundView.alpha = 0.0f;`");
+//    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
 //    [self _mlnbt_setNavigationBarHidden:navigationBarHidden];
 //}
 //
 //- (void)_mlnbt_setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
-//    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundView.alpha = 0.0f;`");
+//    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
 //    [self _mlnbt_setNavigationBarHidden:hidden animated:animated];
 //}
 
@@ -82,12 +110,12 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
             if (backIndicatorView) {
                 //Because `snapshotViewAfterScreenUpdates:` has some bugs, we abandon it
 //                UIView *backIndicatorSnapshotView = [backIndicatorView snapshotViewAfterScreenUpdates:NO];
-                
+#warning 在iOS11发现，屌title也会立马变色，需要处理下
                 UIImageView *backIndicatorSnapshotView = [[UIImageView alloc]initWithImage:_mlnbt_snapshotWithView(backIndicatorView,NO)];
                 backIndicatorSnapshotView.alpha = backIndicatorView.alpha;
                 
-                backIndicatorSnapshotView.frame = backIndicatorView.frame;
-                [backIndicatorView.superview addSubview:backIndicatorSnapshotView];
+                backIndicatorSnapshotView.frame = backIndicatorView.bounds;
+                [backIndicatorView addSubview:backIndicatorSnapshotView];
                 
                 [self.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
                     backIndicatorSnapshotView.alpha = 0.0f;
@@ -190,6 +218,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 - (void)_mlnbt_animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UINavigationController *navigationController = fromVC.navigationController;
+    
     //if no _mlnbt_transitionFromBar, dont need continue
     if (!navigationController||!navigationController._mlnbt_transitionFromBar||![navigationController.transitionCoordinator isAnimated]) {
         navigationController._mlnbt_transitionFromBar = nil;
@@ -223,12 +252,13 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
     BOOL sameBackgroundEffect = [navigationController._mlnbt_transitionFromBar ml_isSameBackgroundEffectToNavigationBar:navigationController._mlnbt_transitionToBar];
     if (!sameBackgroundEffect) {
         navigationController.navigationBar.ml_backgroundView.hidden = YES;
+        navigationController.navigationBar.ml_backgroundView._mlnbt_disableSettingHidden = YES;
         
         [containerFromView addSubview:navigationController._mlnbt_transitionFromBar];
         [containerToView addSubview:navigationController._mlnbt_transitionToBar];
     }else{
         //if alpha not equal with 1.0f, show long shadow border
-        if (navigationController._mlnbt_transitionFromBar.ml_backgroundView.alpha*navigationController._mlnbt_transitionFromBar.alpha>=0.999f) {
+        if (navigationController._mlnbt_transitionFromBar.ml_backgroundAlpha*navigationController._mlnbt_transitionFromBar.alpha>=0.999f) {
             shortShadowBorder = YES;
         }
         
@@ -252,16 +282,21 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
 - (void)_mlnbt_animationEnded:(BOOL)transitionCompleted {
     [self _mlnbt_animationEnded:transitionCompleted];
     
+    UINavigationController *navigationController = nil;
+    
     id<UIViewControllerContextTransitioning> transitionContext = [self _mlnbt_transitionContextForUINavigationParallaxTransition];
-    if (!transitionContext) {
-        return;
+    if (transitionContext) {
+        UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+        navigationController = toVC.navigationController;
+        if (!navigationController) {
+            navigationController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey].navigationController;
+        }
     }
     
-    UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UINavigationController *navigationController = toVC.navigationController;
     if (!navigationController) {
-        navigationController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey].navigationController;
+        return;
     }
+    navigationController.navigationBar.ml_backgroundView._mlnbt_disableSettingHidden = NO;
     
     //fix a bug below 8.3
     if (navigationController.navigationBar.ml_backgroundView.hidden) {

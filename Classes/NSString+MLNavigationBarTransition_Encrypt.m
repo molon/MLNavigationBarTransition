@@ -7,6 +7,9 @@
 //
 
 #import "NSString+MLNavigationBarTransition_Encrypt.h"
+#import "MLNavigationBarTransitionDefine.h"
+
+MLNBT_SYNTH_DUMMY_CLASS(NSString_MLNavigationBarTransition_Encrypt)
 
 @implementation NSString (MLNavigationBarTransition_Encrypt)
 

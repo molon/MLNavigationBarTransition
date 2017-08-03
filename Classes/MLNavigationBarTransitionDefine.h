@@ -32,6 +32,28 @@ static inline BOOL mlnbt_doesIvarExistWithName(Class cls,NSString *ivarName) {
     return NO;
 }
 
+static inline BOOL mlnbt_doesPropertyExistWithName(Class cls,NSString *propertyName) {
+    if (!cls) {
+        return NO;
+    }
+    
+    unsigned int propertyCount = 0;
+    objc_property_t *properties = class_copyPropertyList(cls, &propertyCount);
+    if (properties) {
+        for (unsigned int i = 0; i < propertyCount; i++) {
+            const char *name = property_getName(properties[i]);
+            if (name) {
+                if ([[NSString stringWithUTF8String:name] isEqualToString:propertyName]) {
+                    free(properties);
+                    return YES;
+                }
+            }
+        }
+        free(properties);
+    }
+    return NO;
+}
+
 static inline BOOL mlnbt_exchangeInstanceMethod(Class cls, SEL originalSel, SEL newSel) {
     if (!cls) {
         return NO;
@@ -60,4 +82,18 @@ objc_setAssociatedObject(self, _cmd, object, OBJC_ASSOCIATION_ ## _association_)
 } \
 - (_type_)_getter_ { \
 return objc_getAssociatedObject(self, @selector(_setter_)); \
+}
+
+#define MLNBT_SYNTH_DYNAMIC_PROPERTY_CTYPE(_getter_, _setter_, _type_) \
+- (void)_setter_ (_type_)object { \
+[self willChangeValueForKey:@#_getter_]; \
+NSValue *value = [NSValue value:&object withObjCType:@encode(_type_)]; \
+objc_setAssociatedObject(self, _cmd, value, OBJC_ASSOCIATION_RETAIN); \
+[self didChangeValueForKey:@#_getter_]; \
+} \
+- (_type_)_getter_ { \
+_type_ cValue = { 0 }; \
+NSValue *value = objc_getAssociatedObject(self, @selector(_setter_)); \
+[value getValue:&cValue]; \
+return cValue; \
 }
