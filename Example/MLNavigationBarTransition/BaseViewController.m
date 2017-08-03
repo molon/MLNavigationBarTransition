@@ -64,7 +64,7 @@ static inline UIImage *kImageWithColor(UIColor *color) {
     self.navigationController.navigationBar.tintColor = config.itemColor;
     
     //alpha
-    self.navigationController.navigationBar.ml_backgroundView.alpha = config?config.backgroundAlpha:1.0f;
+    self.navigationController.navigationBar.ml_backgroundAlpha = config?config.backgroundAlpha:1.0f;
     
     //shadow hidden
     self.navigationController.navigationBar.ml_backgroundShadowView.hidden = config?!config.showShadowImage:NO;
@@ -73,7 +73,7 @@ static inline UIImage *kImageWithColor(UIColor *color) {
     
     //Please set translucent to YES,.
     //If it's YES, the self.view.frame.origin.y would be zero.
-    //Or if ml_backgroundView.alpha<1.0f, the views below it would be displayed.
+    //Or if ml_backgroundAlpha<1.0f, the views below it would be displayed.
     [self.navigationController.navigationBar setTranslucent:YES];
     
     //update status bar style

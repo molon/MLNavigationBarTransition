@@ -283,11 +283,27 @@ struct dummy arg = va_arg(args, struct dummy); \
     }
 }
 
-
-
 @end
 
 @implementation UINavigationBar (MLNavigationBarTransition)
+
+- (UIView*)_mlnbt_recursiveFindSubviewWithClassNames:(NSArray*)clsNames {
+    UIView *curView = self;
+    for (NSString *clsName in clsNames) {
+        NSArray *subviews = [curView subviews];
+        curView = nil;
+        for (UIView *v in subviews) {
+            if ([v isKindOfClass:NSClassFromString(clsName)]) {
+                curView = v;
+                break;
+            }
+        }
+        if (!curView) {
+            return nil;
+        }
+    }
+    return curView;
+}
 
 - (UIView*)ml_backIndicatorView {
     static NSString *ivarKey = nil;
@@ -306,16 +322,43 @@ struct dummy arg = va_arg(args, struct dummy); \
         return [self valueForKey:ivarKey];
     }
     
-    NSAssert(NO, @"ml_backIndicatorView is not valid");
-    return nil;
+    //    NSAssert(NO, @"ml_backIndicatorView is not valid");
+    //    return nil;
+    
+    //in iOS11, we only can find it with view hierarchy
+//    NSLog(@"%@:%@",@"_UINavigationBarContentView",[@"_UINavigationBarContentView" mlnbt_EncryptString]);
+//    NSLog(@"%@:%@",@"_UIButtonBarButton",[@"_UIButtonBarButton" mlnbt_EncryptString]);
+//    NSLog(@"%@:%@",@"_UIModernBarButton",[@"_UIModernBarButton" mlnbt_EncryptString]);
+    NSArray *clsNames = @[[@"K1IWGzS2nJquqTyioxWupxAioaEyoaEJnJI3" mlnbt_DecryptString],
+                          [@"K1IWDaI0qT9hDzSlDaI0qT9h" mlnbt_DecryptString],
+                          [@"K1IWGJ9xMKWhDzSlDaI0qT9h" mlnbt_DecryptString]];
+    return [self _mlnbt_recursiveFindSubviewWithClassNames:clsNames];
 }
 
 - (UILabel*)ml_backButtonLabel {
     UILabel *label = nil;
+    
+    if ([UIDevice currentDevice].systemVersion.doubleValue>=11.0f) {
+        //in iOS11, we only can find it with view hierarchy
+//            NSLog(@"%@:%@",@"_UINavigationBarContentView",[@"_UINavigationBarContentView" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"_UIButtonBarButton",[@"_UIButtonBarButton" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"_UIBackButtonContainerView",[@"_UIBackButtonContainerView" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"_UIModernBarButton",[@"_UIModernBarButton" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"UIButtonLabel",[@"UIButtonLabel" mlnbt_EncryptString]);
+        NSArray *clsNames = @[[@"K1IWGzS2nJquqTyioxWupxAioaEyoaEJnJI3" mlnbt_DecryptString],
+                              [@"K1IWDaI0qT9hDzSlDaI0qT9h" mlnbt_DecryptString],
+                              [@"K1IWDzSwn0W1qUEioxAioaEunJ5ypyMcMKp=" mlnbt_DecryptString],
+                              [@"K1IWGJ9xMKWhDzSlDaI0qT9h" mlnbt_DecryptString],
+                              [@"IHyPqKE0o25ZLJWyoN==" mlnbt_DecryptString],
+                              ];
+        return (UILabel*)[self _mlnbt_recursiveFindSubviewWithClassNames:clsNames];
+    }
+    
     @try {
         //    NSLog(@"%@:%@",@"_backButtonView",[@"_backButtonView" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"_label",[@"_label" mlnbt_EncryptString]);
         UIView *backButtonView = [self.backItem valueForKey:[@"K2WuL2gPqKE0o25JnJI3" mlnbt_DecryptString]];
-        label = [backButtonView valueForKey:@"_label"];
+        label = [backButtonView valueForKey:[@"K2kuLzIf" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
         NSAssert(NO, @"ml_backButtonLabel is not valid");
@@ -334,7 +377,7 @@ struct dummy arg = va_arg(args, struct dummy); \
 }
 
 - (UIView*)ml_backgroundView {
-    static NSString *ivarKey = nil;
+    static NSString *varkey = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //  NSLog(@"%@:%@",@"_barBackgroundView",[@"_barBackgroundView" mlnbt_EncryptString]);
@@ -342,13 +385,22 @@ struct dummy arg = va_arg(args, struct dummy); \
         NSArray *keys = @[[@"K2WupxWuL2gapz91ozEJnJI3" mlnbt_DecryptString],[@"K2WuL2gapz91ozEJnJI3" mlnbt_DecryptString]];
         for (NSString *key in keys) {
             if (mlnbt_doesIvarExistWithName([self class], key)) {
-                ivarKey = key;
+                varkey = key;
+                break;
+            }
+        }
+        
+        //in iOS11, it is a property named `_backgroundView`
+        keys = @[[@"K2WuL2gapz91ozEJnJI3" mlnbt_DecryptString]];
+        for (NSString *key in keys) {
+            if (mlnbt_doesPropertyExistWithName([self class], key)) {
+                varkey = key;
                 break;
             }
         }
     });
-    if (ivarKey) {
-        return [self valueForKey:ivarKey];
+    if (varkey) {
+        return [self valueForKey:varkey];
     }
     
     NSAssert(NO, @"ml_backgroundView is not valid");
@@ -388,8 +440,7 @@ struct dummy arg = va_arg(args, struct dummy); \
 }
 
 - (UINavigationBar*)ml_replicantBarOfSameBackgroundEffectWithContainerView:(UIView*)containerView {
-    UINavigationBar *bar = [UINavigationBar new];
-    
+	UINavigationBar *bar = [UINavigationBar new];
     bar.tintColor = self.tintColor;
     bar.barStyle = self.barStyle;
     bar.shadowImage = self.shadowImage;
@@ -447,7 +498,7 @@ struct dummy arg = va_arg(args, struct dummy); \
     
     //alpha
     bar.alpha = self.alpha;
-    bar.ml_backgroundView.alpha = self.ml_backgroundView.alpha;
+    bar.ml_backgroundAlpha = self.ml_backgroundAlpha;
     
     //shadow image view alpha and hidden
     bar.ml_backgroundShadowView.alpha = self.ml_backgroundShadowView.alpha;
@@ -481,7 +532,7 @@ struct dummy arg = va_arg(args, struct dummy); \
     if (!CGSizeEqualToSize(self.frame.size, navigationBar.frame.size)||
         self.alpha!=navigationBar.alpha||
         !CGSizeEqualToSize(self.ml_backgroundView.frame.size, navigationBar.ml_backgroundView.frame.size)||
-        self.ml_backgroundView.alpha != navigationBar.ml_backgroundView.alpha||
+        self.ml_backgroundAlpha != navigationBar.ml_backgroundAlpha||
         self.ml_backgroundShadowView.alpha != navigationBar.ml_backgroundShadowView.alpha||
         self.ml_backgroundShadowView.hidden != navigationBar.ml_backgroundShadowView.hidden
         ) {
@@ -492,21 +543,80 @@ struct dummy arg = va_arg(args, struct dummy); \
         return NO;
     }
     
-    //if backgroundImages equal, ignore barTintColor
-    UIImage *backgroundImage1 = self.ml_currentBackgroundImage;
-    UIImage *backgroundImage2 = navigationBar.ml_currentBackgroundImage;
-    if ([backgroundImage1 isEqual:backgroundImage2]||[UIImagePNGRepresentation(backgroundImage1) isEqual:UIImagePNGRepresentation(backgroundImage2)]) {
-        return YES;
-    }
-    
-    //if no backgroundImages, barTintColor should be cared
-    if (!backgroundImage1&&!backgroundImage2) {
-        if (CGColorEqualToColor(self.barTintColor.CGColor, navigationBar.barTintColor.CGColor)) {
+//    //if backgroundImages equal, ignore barTintColor
+//    UIImage *backgroundImage1 = self.ml_currentBackgroundImage;
+//    UIImage *backgroundImage2 = navigationBar.ml_currentBackgroundImage;
+//    if ([backgroundImage1 isEqual:backgroundImage2]||[UIImagePNGRepresentation(backgroundImage1) isEqual:UIImagePNGRepresentation(backgroundImage2)]) {
+//        return YES;
+//    }
+//
+//    //if no backgroundImages, barTintColor should be cared
+//    if (!backgroundImage1&&!backgroundImage2) {
+//        if ((!self.barTintColor&&!navigationBar.barTintColor)||CGColorEqualToColor(self.barTintColor.CGColor, navigationBar.barTintColor.CGColor)) {
+//            return YES;
+//        }
+//    }
+
+    //sometimes(like iOS11) the the ml_currentBackgroundImage is not valid to compare now, so we use another way!
+    __block BOOL allBackgroundImageNil = YES;
+    BOOL (^imageEqualBlock)(UIImage *,UIImage *) = ^BOOL (UIImage *a,UIImage *b){
+        if (!a&&!b) {
+            return YES;
+        }
+        allBackgroundImageNil = NO;
+        
+        if ([a isEqual:b]) {
+            return YES;
+        }
+        if ([UIImagePNGRepresentation(a) isEqual:UIImagePNGRepresentation(b)]) {
+            return YES;
+        }
+        return NO;
+    };
+
+    if (imageEqualBlock([self backgroundImageForBarMetrics:UIBarMetricsDefault],[navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault])&&
+        imageEqualBlock([self backgroundImageForBarMetrics:UIBarMetricsCompact],[navigationBar backgroundImageForBarMetrics:UIBarMetricsCompact])&&
+        imageEqualBlock([self backgroundImageForBarMetrics:UIBarMetricsDefaultPrompt],[navigationBar backgroundImageForBarMetrics:UIBarMetricsDefaultPrompt])&&
+        imageEqualBlock([self backgroundImageForBarMetrics:UIBarMetricsCompactPrompt],[navigationBar backgroundImageForBarMetrics:UIBarMetricsCompactPrompt])) {
+        if (allBackgroundImageNil) {
+            //if all nil ,care about barTintColor
+            if ((!self.barTintColor&&!navigationBar.barTintColor)||CGColorEqualToColor(self.barTintColor.CGColor, navigationBar.barTintColor.CGColor)) {
+                return YES;
+            }
+        }else{
             return YES;
         }
     }
     
     return NO;
+}
+
+- (CGFloat)ml_backgroundAlpha {
+    CGFloat alpha = self.ml_backgroundView.alpha;
+//    NSLog(@"%@:%@",@"_backgroundOpacity",[@"_backgroundOpacity" mlnbt_EncryptString]);
+    SEL sel = NSSelectorFromString([@"K2WuL2gapz91ozECpTSwnKE5" mlnbt_DecryptString]);
+    if (class_getInstanceMethod([UINavigationBar class], sel)) {
+        @try {
+            alpha = [[self mlnbt_performSelectorWithArgs:sel]doubleValue];
+        } @catch  (NSException *exception) {
+            alpha = self.ml_backgroundView.alpha;
+            NSLog(@"backgroundOpacity of UINavigationBar is not exist now!");
+        }
+    }
+    return alpha;
+}
+
+- (void)setMl_backgroundAlpha:(CGFloat)ml_backgroundAlpha {
+    self.ml_backgroundView.alpha = ml_backgroundAlpha;
+//    NSLog(@"%@:%@",@"_setBackgroundOpacity:",[@"_setBackgroundOpacity:" mlnbt_EncryptString]);
+    SEL sel = NSSelectorFromString([@"K3AyqRWuL2gapz91ozECpTSwnKE5Bt==" mlnbt_DecryptString]);
+    if (class_getInstanceMethod([UINavigationBar class], sel)) {
+        @try {
+            [self mlnbt_performSelectorWithArgs:sel,ml_backgroundAlpha];
+        } @catch (NSException *exception) {
+            NSLog(@"setBackgroundOpacity: of UINavigationBar is not exist now!");
+        }
+    }
 }
 
 + (void)load {
@@ -521,7 +631,7 @@ struct dummy arg = va_arg(args, struct dummy); \
 
 - (UIView *)_mlnbt_hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     UIView *r = [self _mlnbt_hitTest:point withEvent:event];
-    if (self.ml_backgroundView.alpha==0.0f) {
+    if (self.ml_backgroundView&&self.ml_backgroundAlpha==0.0f) {
         if ([r isEqual:self]||[r isEqual:self.ml_backgroundView]) {
             //Because although touching back button area, the r is always the bar. so we need do extra checking.
             @try {
