@@ -287,6 +287,24 @@ struct dummy arg = va_arg(args, struct dummy); \
 
 @implementation UINavigationBar (MLNavigationBarTransition)
 
+- (UIView*)_mlnbt_recursiveFindSubviewWithClassNames:(NSArray*)clsNames {
+    UIView *curView = self;
+    for (NSString *clsName in clsNames) {
+        NSArray *subviews = [curView subviews];
+        curView = nil;
+        for (UIView *v in subviews) {
+            if ([v isKindOfClass:NSClassFromString(clsName)]) {
+                curView = v;
+                break;
+            }
+        }
+        if (!curView) {
+            return nil;
+        }
+    }
+    return curView;
+}
+
 - (UIView*)ml_backIndicatorView {
     static NSString *ivarKey = nil;
     static dispatch_once_t onceToken;
@@ -314,29 +332,33 @@ struct dummy arg = va_arg(args, struct dummy); \
     NSArray *clsNames = @[[@"K1IWGzS2nJquqTyioxWupxAioaEyoaEJnJI3" mlnbt_DecryptString],
                           [@"K1IWDaI0qT9hDzSlDaI0qT9h" mlnbt_DecryptString],
                           [@"K1IWGJ9xMKWhDzSlDaI0qT9h" mlnbt_DecryptString]];
-    UIView *curView = self;
-    for (NSString *clsName in clsNames) {
-        NSArray *subviews = [curView subviews];
-        curView = nil;
-        for (UIView *v in subviews) {
-            if ([v isKindOfClass:NSClassFromString(clsName)]) {
-                curView = v;
-                break;
-            }
-        }
-        if (!curView) {
-            return nil;
-        }
-    }
-    return curView;
+    return [self _mlnbt_recursiveFindSubviewWithClassNames:clsNames];
 }
 
 - (UILabel*)ml_backButtonLabel {
     UILabel *label = nil;
+    
+    if ([UIDevice currentDevice].systemVersion.doubleValue>=11.0f) {
+        //in iOS11, we only can find it with view hierarchy
+//            NSLog(@"%@:%@",@"_UINavigationBarContentView",[@"_UINavigationBarContentView" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"_UIButtonBarButton",[@"_UIButtonBarButton" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"_UIBackButtonContainerView",[@"_UIBackButtonContainerView" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"_UIModernBarButton",[@"_UIModernBarButton" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"UIButtonLabel",[@"UIButtonLabel" mlnbt_EncryptString]);
+        NSArray *clsNames = @[[@"K1IWGzS2nJquqTyioxWupxAioaEyoaEJnJI3" mlnbt_DecryptString],
+                              [@"K1IWDaI0qT9hDzSlDaI0qT9h" mlnbt_DecryptString],
+                              [@"K1IWDzSwn0W1qUEioxAioaEunJ5ypyMcMKp=" mlnbt_DecryptString],
+                              [@"K1IWGJ9xMKWhDzSlDaI0qT9h" mlnbt_DecryptString],
+                              [@"IHyPqKE0o25ZLJWyoN==" mlnbt_DecryptString],
+                              ];
+        return (UILabel*)[self _mlnbt_recursiveFindSubviewWithClassNames:clsNames];
+    }
+    
     @try {
         //    NSLog(@"%@:%@",@"_backButtonView",[@"_backButtonView" mlnbt_EncryptString]);
+//            NSLog(@"%@:%@",@"_label",[@"_label" mlnbt_EncryptString]);
         UIView *backButtonView = [self.backItem valueForKey:[@"K2WuL2gPqKE0o25JnJI3" mlnbt_DecryptString]];
-        label = [backButtonView valueForKey:@"_label"];
+        label = [backButtonView valueForKey:[@"K2kuLzIf" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
         NSAssert(NO, @"ml_backButtonLabel is not valid");
@@ -418,16 +440,7 @@ struct dummy arg = va_arg(args, struct dummy); \
 }
 
 - (UINavigationBar*)ml_replicantBarOfSameBackgroundEffectWithContainerView:(UIView*)containerView {
-	UINavigationBar *bar = nil;
-    //iOS11之后直接new出来的话，会少很多东西，所以需要靠UINavigationController走一波
-    if ([UIDevice currentDevice].systemVersion.doubleValue<11.0f) {
-        bar = [UINavigationBar new];
-    }else{
-#warning 如果左边tintColor为red，右边的也是，但是右边有back img为gray，就会异常，需要查查
-        UINavigationController *navVC = [UINavigationController new];
-        bar = navVC.navigationBar;
-    }
-
+	UINavigationBar *bar = [UINavigationBar new];
     bar.tintColor = self.tintColor;
     bar.barStyle = self.barStyle;
     bar.shadowImage = self.shadowImage;
@@ -504,10 +517,6 @@ struct dummy arg = va_arg(args, struct dummy); \
     //translucent
     bar.translucent = self.translucent;
     
-    if (bar.superview) {
-        [bar removeFromSuperview];
-    }
-    
     return bar;
 }
 
@@ -534,16 +543,47 @@ struct dummy arg = va_arg(args, struct dummy); \
         return NO;
     }
     
-    //if backgroundImages equal, ignore barTintColor
-    UIImage *backgroundImage1 = self.ml_currentBackgroundImage;
-    UIImage *backgroundImage2 = navigationBar.ml_currentBackgroundImage;
-    if ([backgroundImage1 isEqual:backgroundImage2]||[UIImagePNGRepresentation(backgroundImage1) isEqual:UIImagePNGRepresentation(backgroundImage2)]) {
-        return YES;
-    }
-    
-    //if no backgroundImages, barTintColor should be cared
-    if (!backgroundImage1&&!backgroundImage2) {
-        if (CGColorEqualToColor(self.barTintColor.CGColor, navigationBar.barTintColor.CGColor)) {
+//    //if backgroundImages equal, ignore barTintColor
+//    UIImage *backgroundImage1 = self.ml_currentBackgroundImage;
+//    UIImage *backgroundImage2 = navigationBar.ml_currentBackgroundImage;
+//    if ([backgroundImage1 isEqual:backgroundImage2]||[UIImagePNGRepresentation(backgroundImage1) isEqual:UIImagePNGRepresentation(backgroundImage2)]) {
+//        return YES;
+//    }
+//
+//    //if no backgroundImages, barTintColor should be cared
+//    if (!backgroundImage1&&!backgroundImage2) {
+//        if ((!self.barTintColor&&!navigationBar.barTintColor)||CGColorEqualToColor(self.barTintColor.CGColor, navigationBar.barTintColor.CGColor)) {
+//            return YES;
+//        }
+//    }
+
+    //sometimes(like iOS11) the the ml_currentBackgroundImage is not valid to compare now, so we use another way!
+    __block BOOL allBackgroundImageNil = YES;
+    BOOL (^imageEqualBlock)(UIImage *,UIImage *) = ^BOOL (UIImage *a,UIImage *b){
+        if (!a&&!b) {
+            return YES;
+        }
+        allBackgroundImageNil = NO;
+        
+        if ([a isEqual:b]) {
+            return YES;
+        }
+        if ([UIImagePNGRepresentation(a) isEqual:UIImagePNGRepresentation(b)]) {
+            return YES;
+        }
+        return NO;
+    };
+
+    if (imageEqualBlock([self backgroundImageForBarMetrics:UIBarMetricsDefault],[navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault])&&
+        imageEqualBlock([self backgroundImageForBarMetrics:UIBarMetricsCompact],[navigationBar backgroundImageForBarMetrics:UIBarMetricsCompact])&&
+        imageEqualBlock([self backgroundImageForBarMetrics:UIBarMetricsDefaultPrompt],[navigationBar backgroundImageForBarMetrics:UIBarMetricsDefaultPrompt])&&
+        imageEqualBlock([self backgroundImageForBarMetrics:UIBarMetricsCompactPrompt],[navigationBar backgroundImageForBarMetrics:UIBarMetricsCompactPrompt])) {
+        if (allBackgroundImageNil) {
+            //if all nil ,care about barTintColor
+            if ((!self.barTintColor&&!navigationBar.barTintColor)||CGColorEqualToColor(self.barTintColor.CGColor, navigationBar.barTintColor.CGColor)) {
+                return YES;
+            }
+        }else{
             return YES;
         }
     }

@@ -110,7 +110,6 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
             if (backIndicatorView) {
                 //Because `snapshotViewAfterScreenUpdates:` has some bugs, we abandon it
 //                UIView *backIndicatorSnapshotView = [backIndicatorView snapshotViewAfterScreenUpdates:NO];
-#warning 在iOS11发现，屌title也会立马变色，需要处理下
                 UIImageView *backIndicatorSnapshotView = [[UIImageView alloc]initWithImage:_mlnbt_snapshotWithView(backIndicatorView,NO)];
                 backIndicatorSnapshotView.alpha = backIndicatorView.alpha;
                 
@@ -124,15 +123,27 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
                 }];
             }
             
+            //backButtonLabel fade out animation
+            UILabel *backButtonLabel = self.navigationBar.ml_backButtonLabel;
+            if (backButtonLabel) {
+                backButtonLabel.textColor = fromTintColor;
+                
+                UIImageView *backButtonLabelSnapshotView = [[UIImageView alloc]initWithImage:_mlnbt_snapshotWithView(backButtonLabel,NO)];
+                backButtonLabelSnapshotView.alpha = backButtonLabel.alpha;
+                
+                backButtonLabelSnapshotView.frame = backButtonLabel.bounds;
+                [backButtonLabel addSubview:backButtonLabelSnapshotView];
+                
+                [self.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                    backButtonLabelSnapshotView.alpha = 0.0f;
+                } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                    [backButtonLabelSnapshotView removeFromSuperview];
+                }];
+            }
         }
     }
     
     [self _mlnbt_startCustomTransition:arg1];
-    
-    if (fromTintColor) {
-        //change backButtonLabel textColor to fromBar's tintColor
-        self.navigationBar.ml_backButtonLabel.textColor = fromTintColor;
-    }
 }
 
 @end

@@ -62,8 +62,8 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
                       @"1.0",
                       ]mutableCopy];
     }
-//    else{
-//        //simple test
+    else{
+        //simple test
 //        if (index==2) {
 //            _configs = [@[
 //                          @"None",
@@ -92,7 +92,7 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
 //                          @"1.0",
 //                          ]mutableCopy];
 //        }
-//    }
+    }
     
     self.navigationBarConfig = [self barConfigWithConfigs:_configs];
 }
