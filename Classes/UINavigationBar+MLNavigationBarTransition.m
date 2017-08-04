@@ -322,7 +322,7 @@ struct dummy arg = va_arg(args, struct dummy); \
         return [self valueForKey:ivarKey];
     }
     
-    //    NSAssert(NO, @"ml_backIndicatorView is not valid");
+    //    MLNBT_NSASSERT(NO, @"ml_backIndicatorView is not valid");
     //    return nil;
     
     //in iOS11, we only can find it with view hierarchy
@@ -361,7 +361,7 @@ struct dummy arg = va_arg(args, struct dummy); \
         label = [backButtonView valueForKey:[@"K2kuLzIf" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
-        NSAssert(NO, @"ml_backButtonLabel is not valid");
+        MLNBT_NSASSERT(NO, @"ml_backButtonLabel is not valid");
     }
     
     return label;
@@ -405,7 +405,7 @@ struct dummy arg = va_arg(args, struct dummy); \
         return [self valueForKey:varKey];
     }
     
-    NSAssert(NO, @"ml_backgroundView is not valid");
+    MLNBT_NSASSERT(NO, @"ml_backgroundView is not valid");
     return nil;
 }
 
@@ -439,7 +439,7 @@ struct dummy arg = va_arg(args, struct dummy); \
         return [self.ml_backgroundView valueForKey:varKey];
     }
     
-    NSAssert(NO, @"ml_currentBackgroundImage is not valid");
+    MLNBT_NSASSERT(NO, @"ml_currentBackgroundImage is not valid");
     return nil;
 }
 
@@ -542,7 +542,7 @@ struct dummy arg = va_arg(args, struct dummy); \
         [bar setValue:@(self.barPosition) forKey:[@"K2WupyOip2y0nJ9h" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
-        NSAssert(NO, @"setting $barPosition is not valid");
+        MLNBT_NSASSERT(NO, @"setting $barPosition is not valid");
         return nil;
     }
     
@@ -576,7 +576,7 @@ struct dummy arg = va_arg(args, struct dummy); \
     }
     
 //    //if backgroundImages equal, ignore barTintColor
-    UIImage *backgroundImage1 = self.ml_currentBackgroundImage;
+//    UIImage *backgroundImage1 = self.ml_currentBackgroundImage;
 //    UIImage *backgroundImage2 = navigationBar.ml_currentBackgroundImage;
 //    if ([backgroundImage1 isEqual:backgroundImage2]||[UIImagePNGRepresentation(backgroundImage1) isEqual:UIImagePNGRepresentation(backgroundImage2)]) {
 //        return YES;

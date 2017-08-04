@@ -68,11 +68,28 @@ static inline BOOL mlnbt_exchangeInstanceMethod(Class cls, SEL originalSel, SEL 
     return YES;
 }
 
+#ifdef DEBUG
+    #define MLNBT_NSASSERT(valid,format, ...)                   \
+        do { \
+            if (!(valid)) {\
+                NSString *astips = [NSString stringWithFormat:(format), ## __VA_ARGS__];\
+        NSLog(@"\n-------------\n%s:%d\n%@\nPlease contact molon. https://github.com/molon/MLNavigationBarTransition/issues\n-------------", __PRETTY_FUNCTION__, __LINE__, astips);\
+                NSAssert(NO, @"\n-------------\n%@\nPlease be assured that this assert will not be executed in the release environment!\nPlease contact molon. https://github.com/molon/MLNavigationBarTransition/issues\n-------------", astips);\
+            }\
+        }while(0)
+#else
+    #define MLNBT_NSASSERT(valid,format, ...)                   \
+        do { \
+        if (!(valid)) {\
+        NSString *astips = [NSString stringWithFormat:(format), ## __VA_ARGS__];\
+        NSLog(@"\n-------------\n%s:%d\n%@\nPlease contact molon. https://github.com/molon/MLNavigationBarTransition/issues\n-------------", __PRETTY_FUNCTION__, __LINE__, astips);\
+        }\
+        }while(0)
+#endif
 
 #define MLNBT_SYNTH_DUMMY_CLASS(_name_) \
 @interface MLNBT_SYNTH_DUMMY_CLASS ## _name_ : NSObject @end \
 @implementation MLNBT_SYNTH_DUMMY_CLASS ## _name_ @end
-
 
 #define MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_getter_, _setter_, _association_, _type_) \
 - (void)_setter_ (_type_)object { \

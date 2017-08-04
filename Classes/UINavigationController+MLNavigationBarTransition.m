@@ -63,17 +63,13 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_CTYPE(_mlnbt_disableSettingHidden, set_mlnbt_disabl
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 //          NSLog(@"%@:%@",@"_startCustomTransition:",[@"_startCustomTransition:" mlnbt_EncryptString]);
-        BOOL valid = /*mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:))&&
-        mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:))&&*/
+        BOOL valid = mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:))&&
+        mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:))&&
         mlnbt_exchangeInstanceMethod(self,NSSelectorFromString([@"K3A0LKW0D3ImqT9gIUWuoaAcqTyiowb=" mlnbt_DecryptString]), @selector(_mlnbt_startCustomTransition:));
-        if (!valid) {
-            NSLog(@"UINavigationController (MLNavigationBarTransition) is not valid now! Please check it.");
-        }
-        NSAssert(valid, @"UINavigationController (MLNavigationBarTransition) is not valid now! Please check it.");
+        MLNBT_NSASSERT(valid, @"UINavigationController (MLNavigationBarTransition) is not valid now!");
 #pragma clang diagnostic pop
     });
 }
@@ -83,17 +79,16 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_CTYPE(_mlnbt_disableSettingHidden, set_mlnbt_disabl
 MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionFromBar, set_mlnbt_transitionFromBar:, RETAIN_NONATOMIC, UINavigationBar *)
 MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:, RETAIN_NONATOMIC, UINavigationBar *)
 
-#warning 处理NSAssert
-//#pragma mark - disable navigationBarHidden
-//- (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
-//    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
-//    [self _mlnbt_setNavigationBarHidden:navigationBarHidden];
-//}
-//
-//- (void)_mlnbt_setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
-//    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
-//    [self _mlnbt_setNavigationBarHidden:hidden animated:animated];
-//}
+#pragma mark - disable navigationBarHidden
+- (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
+    NSLog(@"Please dont use `navigationBarHidden`,there are some bugs with it in iOS SDK. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
+    [self _mlnbt_setNavigationBarHidden:navigationBarHidden];
+}
+
+- (void)_mlnbt_setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
+    NSLog(@"Please dont use `navigationBarHidden`,there are some bugs with it in iOS SDK. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
+    [self _mlnbt_setNavigationBarHidden:hidden animated:animated];
+}
 
 - (void)_mlnbt_startCustomTransition:(id)arg1 {
     UIColor *fromTintColor = nil;
@@ -170,10 +165,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
         
         BOOL valid = mlnbt_exchangeInstanceMethod(cls,@selector(animateTransition:),@selector(_mlnbt_animateTransition:))&&
         mlnbt_exchangeInstanceMethod(cls,@selector(animationEnded:),@selector(_mlnbt_animationEnded:));
-        if (!valid) {
-            NSLog(@"NSObject(MLNavigationBarTransition) is not valid now! Please check it.");
-        }
-        NSAssert(valid, @"NSObject(MLNavigationBarTransition) is not valid now! Please check it.");
+        MLNBT_NSASSERT(valid, @"NSObject(MLNavigationBarTransition) is not valid now! Please check it.");
     });
 }
 
@@ -194,7 +186,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
         }
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
-        NSAssert(NO, @"_mlnbt_shadowBorderViewForUINavigationParallaxTransition is not valid");
+        MLNBT_NSASSERT(NO, @"_mlnbt_shadowBorderViewForUINavigationParallaxTransition is not valid");
     }
     return nil;
 }
@@ -205,7 +197,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
         return [self valueForKey:[@"L29hqTScozIlEaWioIMcMKp=" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
-        NSAssert(NO, @"`containerFromView` key of UINavigationParallaxTransition is not valid");
+        MLNBT_NSASSERT(NO, @"`containerFromView` key of UINavigationParallaxTransition is not valid");
     }
     return nil;
 }
@@ -216,7 +208,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
         return [self valueForKey:[@"L29hqTScozIlIT9JnJI3" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
-        NSAssert(NO, @"`containerToView` key of UINavigationParallaxTransition is not valid");
+        MLNBT_NSASSERT(NO, @"`containerToView` key of UINavigationParallaxTransition is not valid");
     }
     return nil;
 }
@@ -227,7 +219,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
         return [self valueForKey:[@"qUWuoaAcqTyioxAioaEyrUD=" mlnbt_DecryptString]];
     } @catch (NSException *exception) {
         NSLog(@"%@",exception);
-        NSAssert(NO, @"`transitionContext` key of UINavigationParallaxTransition is not valid");
+        MLNBT_NSASSERT(NO, @"`transitionContext` key of UINavigationParallaxTransition is not valid");
     }
     return nil;
 }
