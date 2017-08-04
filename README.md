@@ -15,7 +15,7 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 
 ### Addition Tips
 
-- Please do not set `navigationBarHidden` to` YES`(it has bugs). If you want to hide the navigation bar, use `self.navigationBar.ml_backgroundView.alpha = 0.0f;`
+- Please do not set `navigationBarHidden` to` YES`(it has bugs). If you want to hide the navigation bar, use `self.navigationBar.ml_backgroundAlpha = 0.0f;`
 - If you want to hide the bottom shadow of the navigation bar, use `self.navigationController.navigationBar.ml_backgroundShadowView.hidden = YES`
 - Keep `translucent` as` YES` as far as possible, because if it is `NO`, the head of the page in the navigator will remain under the navigation bar, so if the navigation bar's `alpha` less than `1.0f`, will reveal views below, resulting in abnormal results.
 
@@ -32,6 +32,6 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 - 对子页面的`view`没有任何侵入。
 
 ### 一些提示
-- 请不要设置`navigationBarHidden`为`YES`，如果想隐藏导航条，请使用`self.navigationBar.ml_backgroundView.alpha = 0.0f;`
+- 请不要设置`navigationBarHidden`为`YES`，如果想隐藏导航条，请使用`self.navigationBar.ml_backgroundAlpha = 0.0f;`
 - 如果想要隐藏导航条底部阴影条，请使用`self.navigationController.navigationBar.ml_backgroundShadowView.hidden = YES`
 - 尽量让`translucent`保持为`YES`，因为它若为`NO`，则导航器里的页面的头部会保持在导航条之下，这样的话，若对导航条背景设置透明度的话，就会透出下面的view，产生异常效果。
