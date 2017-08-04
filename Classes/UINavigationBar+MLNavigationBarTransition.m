@@ -377,7 +377,7 @@ struct dummy arg = va_arg(args, struct dummy); \
 }
 
 - (UIView*)ml_backgroundView {
-    static NSString *varkey = nil;
+    static NSString *varKey = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //  NSLog(@"%@:%@",@"_barBackgroundView",[@"_barBackgroundView" mlnbt_EncryptString]);
@@ -385,22 +385,24 @@ struct dummy arg = va_arg(args, struct dummy); \
         NSArray *keys = @[[@"K2WupxWuL2gapz91ozEJnJI3" mlnbt_DecryptString],[@"K2WuL2gapz91ozEJnJI3" mlnbt_DecryptString]];
         for (NSString *key in keys) {
             if (mlnbt_doesIvarExistWithName([self class], key)) {
-                varkey = key;
+                varKey = key;
                 break;
             }
         }
         
-        //in iOS11, it is a property named `_backgroundView`
-        keys = @[[@"K2WuL2gapz91ozEJnJI3" mlnbt_DecryptString]];
-        for (NSString *key in keys) {
-            if (mlnbt_doesPropertyExistWithName([self class], key)) {
-                varkey = key;
-                break;
+        if (!varKey) {
+            //in iOS11, it is a property named `_backgroundView`
+            keys = @[[@"K2WuL2gapz91ozEJnJI3" mlnbt_DecryptString]];
+            for (NSString *key in keys) {
+                if (mlnbt_doesPropertyExistWithName([self class], key)) {
+                    varKey = key;
+                    break;
+                }
             }
         }
     });
-    if (varkey) {
-        return [self valueForKey:varkey];
+    if (varKey) {
+        return [self valueForKey:varKey];
     }
     
     NSAssert(NO, @"ml_backgroundView is not valid");
@@ -408,35 +410,65 @@ struct dummy arg = va_arg(args, struct dummy); \
 }
 
 - (UIImage*)ml_currentBackgroundImage {
-    static NSString *ivarKey = nil;
+    static NSString *varKey = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         //    NSLog(@"%@:%@",@"_backgroundImage",[@"_backgroundImage" mlnbt_EncryptString]);
         NSArray *keys = @[[@"K2WuL2gapz91ozEWoJSaMD==" mlnbt_DecryptString]];
         for (NSString *key in keys) {
             if (mlnbt_doesIvarExistWithName([self.ml_backgroundView class], key)) {
-                ivarKey = key;
+                varKey = key;
                 break;
             }
         }
-        if (!ivarKey) {
+        if (!varKey) {
             //            NSLog(@"%@:%@",@"_currentCustomBackground",[@"_currentCustomBackground" mlnbt_EncryptString]);
-            
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wundeclared-selector"
             NSString *selName = [@"K2A1paWyoaEQqKA0o21PLJAeM3WiqJ5x" mlnbt_DecryptString];
-            if ([self.ml_backgroundView respondsToSelector:NSSelectorFromString(selName)]) {
-                ivarKey = selName;
+            if (self.ml_backgroundView&&class_getInstanceMethod([self.ml_backgroundView class],NSSelectorFromString(selName))) {
+                varKey = selName;
             }
-#pragma clang diagnostic pop
+//            if ([self.ml_backgroundView respondsToSelector:NSSelectorFromString(selName)]) {
+//                varKey = selName;
+//            }
+//#pragma clang diagnostic pop
         }
     });
-    if (ivarKey) {
-        return [self.ml_backgroundView valueForKey:ivarKey];
+    if (varKey) {
+        return [self.ml_backgroundView valueForKey:varKey];
     }
     
     NSAssert(NO, @"ml_currentBackgroundImage is not valid");
     return nil;
+}
+
+- (CGFloat)ml_backgroundAlpha {
+    CGFloat alpha = self.ml_backgroundView.alpha;
+    //    NSLog(@"%@:%@",@"_backgroundOpacity",[@"_backgroundOpacity" mlnbt_EncryptString]);
+    SEL sel = NSSelectorFromString([@"K2WuL2gapz91ozECpTSwnKE5" mlnbt_DecryptString]);
+    if (class_getInstanceMethod([UINavigationBar class], sel)) {
+        @try {
+            alpha = [[self mlnbt_performSelectorWithArgs:sel]doubleValue];
+        } @catch  (NSException *exception) {
+            alpha = self.ml_backgroundView.alpha;
+            NSLog(@"backgroundOpacity of UINavigationBar is not exist now!");
+        }
+    }
+    return alpha;
+}
+
+- (void)setMl_backgroundAlpha:(CGFloat)ml_backgroundAlpha {
+    self.ml_backgroundView.alpha = ml_backgroundAlpha;
+    //    NSLog(@"%@:%@",@"_setBackgroundOpacity:",[@"_setBackgroundOpacity:" mlnbt_EncryptString]);
+    SEL sel = NSSelectorFromString([@"K3AyqRWuL2gapz91ozECpTSwnKE5Bt==" mlnbt_DecryptString]);
+    if (class_getInstanceMethod([UINavigationBar class], sel)) {
+        @try {
+            [self mlnbt_performSelectorWithArgs:sel,ml_backgroundAlpha];
+        } @catch (NSException *exception) {
+            NSLog(@"setBackgroundOpacity: of UINavigationBar is not exist now!");
+        }
+    }
 }
 
 - (UINavigationBar*)ml_replicantBarOfSameBackgroundEffectWithContainerView:(UIView*)containerView {
@@ -544,7 +576,7 @@ struct dummy arg = va_arg(args, struct dummy); \
     }
     
 //    //if backgroundImages equal, ignore barTintColor
-//    UIImage *backgroundImage1 = self.ml_currentBackgroundImage;
+    UIImage *backgroundImage1 = self.ml_currentBackgroundImage;
 //    UIImage *backgroundImage2 = navigationBar.ml_currentBackgroundImage;
 //    if ([backgroundImage1 isEqual:backgroundImage2]||[UIImagePNGRepresentation(backgroundImage1) isEqual:UIImagePNGRepresentation(backgroundImage2)]) {
 //        return YES;
@@ -589,34 +621,6 @@ struct dummy arg = va_arg(args, struct dummy); \
     }
     
     return NO;
-}
-
-- (CGFloat)ml_backgroundAlpha {
-    CGFloat alpha = self.ml_backgroundView.alpha;
-//    NSLog(@"%@:%@",@"_backgroundOpacity",[@"_backgroundOpacity" mlnbt_EncryptString]);
-    SEL sel = NSSelectorFromString([@"K2WuL2gapz91ozECpTSwnKE5" mlnbt_DecryptString]);
-    if (class_getInstanceMethod([UINavigationBar class], sel)) {
-        @try {
-            alpha = [[self mlnbt_performSelectorWithArgs:sel]doubleValue];
-        } @catch  (NSException *exception) {
-            alpha = self.ml_backgroundView.alpha;
-            NSLog(@"backgroundOpacity of UINavigationBar is not exist now!");
-        }
-    }
-    return alpha;
-}
-
-- (void)setMl_backgroundAlpha:(CGFloat)ml_backgroundAlpha {
-    self.ml_backgroundView.alpha = ml_backgroundAlpha;
-//    NSLog(@"%@:%@",@"_setBackgroundOpacity:",[@"_setBackgroundOpacity:" mlnbt_EncryptString]);
-    SEL sel = NSSelectorFromString([@"K3AyqRWuL2gapz91ozECpTSwnKE5Bt==" mlnbt_DecryptString]);
-    if (class_getInstanceMethod([UINavigationBar class], sel)) {
-        @try {
-            [self mlnbt_performSelectorWithArgs:sel,ml_backgroundAlpha];
-        } @catch (NSException *exception) {
-            NSLog(@"setBackgroundOpacity: of UINavigationBar is not exist now!");
-        }
-    }
 }
 
 + (void)load {

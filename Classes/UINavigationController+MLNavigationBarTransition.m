@@ -83,6 +83,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_CTYPE(_mlnbt_disableSettingHidden, set_mlnbt_disabl
 MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionFromBar, set_mlnbt_transitionFromBar:, RETAIN_NONATOMIC, UINavigationBar *)
 MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:, RETAIN_NONATOMIC, UINavigationBar *)
 
+#warning 处理NSAssert
 //#pragma mark - disable navigationBarHidden
 //- (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
 //    NSAssert(NO, @"Please dont use `navigationBarHidden`,there are some bugs with it. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
@@ -110,17 +111,20 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
             if (backIndicatorView) {
                 //Because `snapshotViewAfterScreenUpdates:` has some bugs, we abandon it
 //                UIView *backIndicatorSnapshotView = [backIndicatorView snapshotViewAfterScreenUpdates:NO];
-                UIImageView *backIndicatorSnapshotView = [[UIImageView alloc]initWithImage:_mlnbt_snapshotWithView(backIndicatorView,NO)];
-                backIndicatorSnapshotView.alpha = backIndicatorView.alpha;
-                
-                backIndicatorSnapshotView.frame = backIndicatorView.bounds;
-                [backIndicatorView addSubview:backIndicatorSnapshotView];
-                
-                [self.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                    backIndicatorSnapshotView.alpha = 0.0f;
-                } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                    [backIndicatorSnapshotView removeFromSuperview];
-                }];
+                UIImage *snapshot = _mlnbt_snapshotWithView(backIndicatorView,NO);
+                if (snapshot) {
+                    UIImageView *backIndicatorSnapshotView = [[UIImageView alloc]initWithImage:snapshot];
+                    backIndicatorSnapshotView.alpha = backIndicatorView.alpha;
+                    
+                    backIndicatorSnapshotView.frame = backIndicatorView.bounds;
+                    [backIndicatorView addSubview:backIndicatorSnapshotView];
+                    
+                    [self.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                        backIndicatorSnapshotView.alpha = 0.0f;
+                    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                        [backIndicatorSnapshotView removeFromSuperview];
+                    }];
+                }
             }
             
             //backButtonLabel fade out animation
@@ -128,17 +132,20 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
             if (backButtonLabel) {
                 backButtonLabel.textColor = fromTintColor;
                 
-                UIImageView *backButtonLabelSnapshotView = [[UIImageView alloc]initWithImage:_mlnbt_snapshotWithView(backButtonLabel,NO)];
-                backButtonLabelSnapshotView.alpha = backButtonLabel.alpha;
-                
-                backButtonLabelSnapshotView.frame = backButtonLabel.bounds;
-                [backButtonLabel addSubview:backButtonLabelSnapshotView];
-                
-                [self.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                    backButtonLabelSnapshotView.alpha = 0.0f;
-                } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-                    [backButtonLabelSnapshotView removeFromSuperview];
-                }];
+                UIImage *snapshot = _mlnbt_snapshotWithView(backButtonLabel,NO);
+                if (snapshot) {
+                    UIImageView *backButtonLabelSnapshotView = [[UIImageView alloc]initWithImage:snapshot];
+                    backButtonLabelSnapshotView.alpha = backButtonLabel.alpha;
+                    
+                    backButtonLabelSnapshotView.frame = backButtonLabel.bounds;
+                    [backButtonLabel addSubview:backButtonLabelSnapshotView];
+                    
+                    [self.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                        backButtonLabelSnapshotView.alpha = 0.0f;
+                    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                        [backButtonLabelSnapshotView removeFromSuperview];
+                    }];
+                }
             }
         }
     }
