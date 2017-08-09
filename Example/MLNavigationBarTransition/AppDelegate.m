@@ -26,6 +26,8 @@
     self.window.rootViewController = [[UINavigationController alloc]initWithRootViewController:[ViewController new]];
     [self.window makeKeyAndVisible];
     
+//    [self.window.layer setSpeed:.1f];
+    
     return YES;
 }
 

@@ -66,8 +66,8 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_CTYPE(_mlnbt_disableSettingHidden, set_mlnbt_disabl
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 //          NSLog(@"%@:%@",@"_startCustomTransition:",[@"_startCustomTransition:" mlnbt_EncryptString]);
-        BOOL valid = mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:))&&
-        mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:))&&
+        BOOL valid = /*mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:), @selector(_mlnbt_setNavigationBarHidden:))&&
+        mlnbt_exchangeInstanceMethod(self, @selector(setNavigationBarHidden:animated:), @selector(_mlnbt_setNavigationBarHidden:animated:))&&*/
         mlnbt_exchangeInstanceMethod(self,NSSelectorFromString([@"K3A0LKW0D3ImqT9gIUWuoaAcqTyiowb=" mlnbt_DecryptString]), @selector(_mlnbt_startCustomTransition:));
         MLNBT_NSASSERT(valid, @"UINavigationController (MLNavigationBarTransition) is not valid now!");
 #pragma clang diagnostic pop
@@ -80,15 +80,15 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionFromBar, set_mlnbt_transiti
 MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transitionToBar:, RETAIN_NONATOMIC, UINavigationBar *)
 
 #pragma mark - disable navigationBarHidden
-- (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
-    NSLog(@"Please dont use `navigationBarHidden`,there are some bugs with it in iOS SDK. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
-    [self _mlnbt_setNavigationBarHidden:navigationBarHidden];
-}
-
-- (void)_mlnbt_setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
-    NSLog(@"Please dont use `navigationBarHidden`,there are some bugs with it in iOS SDK. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
-    [self _mlnbt_setNavigationBarHidden:hidden animated:animated];
-}
+//- (void)_mlnbt_setNavigationBarHidden:(BOOL)navigationBarHidden {
+//    NSLog(@"Please dont use `navigationBarHidden`,there are some bugs with it in iOS SDK. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
+//    [self _mlnbt_setNavigationBarHidden:navigationBarHidden];
+//}
+//
+//- (void)_mlnbt_setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
+//    NSLog(@"Please dont use `navigationBarHidden`,there are some bugs with it in iOS SDK. You can use `.navigationBar.ml_backgroundAlpha = 0.0f;`");
+//    [self _mlnbt_setNavigationBarHidden:hidden animated:animated];
+//}
 
 - (void)_mlnbt_startCustomTransition:(id)arg1 {
     UIColor *fromTintColor = nil;
@@ -278,12 +278,8 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
     
     [self _mlnbt_animateTransition:transitionContext];
     
-    UIView *shadowBorderView = [self _mlnbt_shadowBorderViewForUINavigationParallaxTransition];
-    if (shortShadowBorder) {
-        CGRect frame = [navigationController.navigationBar.superview convertRect:navigationController.navigationBar.frame toView:shadowBorderView.superview];
-        //ensure display below naivigationBar
-        shadowBorderView.frame = CGRectMake(shadowBorderView.frame.origin.x, frame.origin.y+frame.size.height, shadowBorderView.frame.size.width, shadowBorderView.frame.size.height);
-    }else{
+    if (!shortShadowBorder) {
+        UIView *shadowBorderView = [self _mlnbt_shadowBorderViewForUINavigationParallaxTransition];
         CGPoint origin = [shadowBorderView convertPoint:CGPointZero toView:containerToView];
         shadowBorderView.frame = CGRectMake(shadowBorderView.frame.origin.x, shadowBorderView.frame.origin.y-origin.y, shadowBorderView.frame.size.width, shadowBorderView.frame.size.height+origin.y);
     }
@@ -315,6 +311,7 @@ MLNBT_SYNTH_DYNAMIC_PROPERTY_OBJECT(_mlnbt_transitionToBar, set_mlnbt_transition
             navigationController.navigationBar.barTintColor = nil;
             navigationController.navigationBar.barTintColor = barTintColor;
         }
+        
         navigationController.navigationBar.ml_backgroundView.hidden = NO;
     }
     
