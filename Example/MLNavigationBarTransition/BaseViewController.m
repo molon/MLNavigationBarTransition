@@ -34,9 +34,9 @@ static inline UIImage *kImageWithColor(UIColor *color) {
 @implementation BaseViewController
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
     [self updateNavigationBarDisplay];
+    
+    [super viewWillAppear:animated];
 }
 
 - (void)updateNavigationBarDisplay {
