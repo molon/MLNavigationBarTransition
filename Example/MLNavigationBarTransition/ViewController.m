@@ -64,34 +64,34 @@ typedef NS_ENUM(NSUInteger, RowIndex) {
     }
     else{
         //simple test
-        if (index==2) {
-            _configs = [@[
-                          @"None",
-                          @"None",
-                          @"Black",
-                          @"Black",
-                          @"YES",
-                          @"0.0",
-                          ]mutableCopy];
-        }else if (index==4) {
-            _configs = [@[
-                          @"Gray",
-                          @"None",
-                          @"White",
-                          @"White",
-                          @"YES",
-                          @"1.0",
-                          ]mutableCopy];
-        }else if (index==5) {
-            _configs = [@[
-                          @"Red",
-                          @"None",
-                          @"Yellow",
-                          @"Yellow",
-                          @"YES",
-                          @"1.0",
-                          ]mutableCopy];
-        }
+//        if (index==2) {
+//            _configs = [@[
+//                          @"None",
+//                          @"None",
+//                          @"Black",
+//                          @"Black",
+//                          @"YES",
+//                          @"0.0",
+//                          ]mutableCopy];
+//        }else if (index==4) {
+//            _configs = [@[
+//                          @"Gray",
+//                          @"None",
+//                          @"White",
+//                          @"White",
+//                          @"YES",
+//                          @"1.0",
+//                          ]mutableCopy];
+//        }else if (index==5) {
+//            _configs = [@[
+//                          @"Red",
+//                          @"None",
+//                          @"Yellow",
+//                          @"Yellow",
+//                          @"YES",
+//                          @"1.0",
+//                          ]mutableCopy];
+//        }
     }
     
     self.navigationBarConfig = [self barConfigWithConfigs:_configs];
