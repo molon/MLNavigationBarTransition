@@ -19,6 +19,10 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 - If you want to hide the bottom shadow of the navigation bar, use `self.navigationController.navigationBar.ml_backgroundShadowView.hidden = YES`
 - Keep `translucent` as` YES` as far as possible, because if it is `NO`, the head of the page in the navigator will remain under the navigation bar, so if the navigation bar's `alpha` less than `1.0f`, will reveal views below, resulting in abnormal results.
 
+### Disclaimer
+1. This library uses unpublished api (non-private), please use it at your own risk, unpublished APIs do not have official compatibility commitments from iOS..
+2. My application has been approved. It is possible that the AppStore will only prohibit the listing of programs that use private APIs and will not strictly treat unpublished APIs, but this is just my guess.
+
 ## 中文介绍
 一直想做个类似微信转场里导航条效果的库，并且一直苦于SDK里`navigationBarHidden`为`YES`时候的BUG没能良好解决。
 在发现了[KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigationBarTransition)之后得到灵感，首先对此表示声明以及感谢，但是由于个别细节无法满足个人喜好，就用了完全不一样的比较暴力的方式重新造了个轮子。
@@ -35,3 +39,7 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 - 请不要设置`navigationBarHidden`为`YES`，如果想隐藏导航条，请使用`self.navigationBar.ml_backgroundAlpha = 0.0f;`
 - 如果想要隐藏导航条底部阴影条，请使用`self.navigationController.navigationBar.ml_backgroundShadowView.hidden = YES`
 - 尽量让`translucent`保持为`YES`，因为它若为`NO`，则导航器里的页面的头部会保持在导航条之下，这样的话，若对导航条背景设置透明度的话，就会透出下面的view，产生异常效果。
+
+### 免责声明
+1. 该库使用未发布的 api（非私有），使用请自担风险，未发布的 api 并没有获得 iOS 官方的兼容性承诺。
+2. 我的应用程序已获得批准，有可能 AppStore 只会禁止使用了私有api的程序上架，不会严格对待未发布的 api，但这也只是我的猜测。
