@@ -20,8 +20,8 @@ Inspired by [KMNavigationBarTransition](https://github.com/MoZhouqi/KMNavigation
 - Keep `translucent` as` YES` as far as possible, because if it is `NO`, the head of the page in the navigator will remain under the navigation bar, so if the navigation bar's `alpha` less than `1.0f`, will reveal views below, resulting in abnormal results.
 
 ### Disclaimer
-1. This library uses unpublished api (non-private), please use it at your own risk, unpublished APIs do not have official compatibility commitments from iOS..
-2. My application has been approved. It is possible that the AppStore will only prohibit the listing of programs that use private APIs and will not strictly treat unpublished APIs, but this is just my guess.
+1. This library uses unpublished api (non-private), please use it at your own risk, unpublished APIs do not have official compatibility commitments from iOS.
+2. My application has been approved. It is possible that the AppStore will only prohibit the listing of applications that use private APIs and will not strictly treat unpublished APIs, but this is just my guess.
 
 ## 中文介绍
 一直想做个类似微信转场里导航条效果的库，并且一直苦于SDK里`navigationBarHidden`为`YES`时候的BUG没能良好解决。
